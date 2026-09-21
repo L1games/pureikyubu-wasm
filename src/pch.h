@@ -1,0 +1,147 @@
+#pragma once
+
+#include <cstdint>
+#include <string>
+#include <vector>
+#include <list>
+#include <map>
+#include <cassert>
+#include <atomic>
+#include <string.h>
+#include <cstdarg>
+#include <unordered_map>
+#include <math.h>
+#include <limits.h>
+#include <fstream>
+
+#ifdef _WINDOWS
+#include <conio.h>
+#include <windows.h>
+#include <shlobj.h>
+#include <commctrl.h>
+#include "res/resource.h"
+#endif
+
+#ifdef _LINUX
+#include <memory.h>
+#include <string.h>
+#include <unistd.h>		// usleep
+#include <pthread.h>
+#include <signal.h>
+#include <libgen.h>		// dirname / basename
+#include <sys/types.h>
+#include <sys/stat.h>	// _wstat (IsDirectory)
+#include <dirent.h>		// BuildFileTree
+#define _stricmp strcasecmp
+#define _strnicmp strncasecmp
+#define _wcsicmp wcscasecmp
+#define _countof(a) (sizeof(a)/sizeof(*(a)))
+#endif
+
+#ifdef __EMSCRIPTEN__
+#include <GLES3/gl3.h>
+#else
+#define GLEW_STATIC
+#include <GL/glew.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+
+// The headless build redirects the OpenGL entry points to the null backend. It has to happen after
+// the GL headers, because it redefines the GLEW macros (see gfxnull.h).
+#ifdef GFX_NULL
+#include "gfxnull.h"
+#endif
+
+#define SDL_MAIN_HANDLED
+#ifdef _WIN32
+#include "SDL.h"
+#else
+#include <SDL2/SDL.h>
+#endif
+#include "imgui.h"
+
+#define my_max(a,b) (((a) > (b)) ? (a) : (b))
+#define my_min(a,b) (((a) < (b)) ? (a) : (b))
+
+#include "utils.h"
+#include "verify.h"
+#include "json.h"
+#include "jdi.h"
+#include "jdiserver.h"
+#include "jdispecs.h"
+#include "mcp.h"
+
+#include "gekkodec.h"
+#include "gekko.h"
+#include "gekkoc.h"
+#include "gekkojit.h"
+#include "gekkodisasm.h"
+#include "gekkodebug.h"
+
+#include "flipper.h"
+
+#if defined(GFX_USE_SDL_WINDOW) || defined(_LINUX)
+#include "audiosdl.h"
+#else
+#include "audio.h"
+#endif
+#include "video.h"
+
+#include "dspdec.h"
+#include "dspcore.h"
+#include "dspai.h"
+#include "dsparam.h"
+#include "dspdma.h"
+#include "dsp.h"
+#include "dspjit.h"
+#include "dspdisasm.h"
+#include "dspdebug.h"
+
+#include "dvd.h"
+#include "dvddebug.h"
+
+#include "gfx.h"
+#include "cp.h"
+#include "ai.h"
+#include "vi.h"
+#include "pi.h"
+#include "mem.h"
+#include "di.h"
+#include "bootrtc.h"
+#include "exi.h"
+#include "memcard.h"
+#include "pad.h"
+#include "si.h"
+#include "flipperdebug.h"
+
+namespace Flipper
+{
+	// TODO: I do not like these lonely definitions, which, moreover, have to be created far away in the emulation module (Emulator.cpp).
+	// Need to make one single class for the Flipper ASIC and move them there.
+	extern DSP::Dsp16* DSP;
+}
+
+#include "sym.h"
+#include "os.h"
+#include "osdebug.h"
+
+#include "debug.h"
+#include "hwprof.h"
+#include "hwosd.h"
+#include "cui.h"
+#include "debugui.h"
+#include "debugui2.h"
+
+#include "config.h"
+#include "main.h"
+#include "uijdi.h"
+#include "ui.h"
+#include "backends/imgui_impl_sdl2.h"
+#include "backends/imgui_impl_sdlrenderer2.h"
+#include "res/sjis.h"
+
+#define _TB(s)
+#define _TE()
+
+extern Gekko::GekkoCore* Core;

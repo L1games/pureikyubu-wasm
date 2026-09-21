@@ -1,0 +1,608 @@
+#pragma once
+
+// The Pixel Engine of both backends: the GL render target of the shader pipeline, and the EFB
+// memory array of the software pipeline (GFX_PIPELINE = soft, issue #384), which also performs the
+// copy engine's display copy into the XFB the video interface scans out.
+
+namespace GFX
+{
+	// PE Registers (from CPU side). 16-bit access.
+
+	#define PE_PI_ZMODE 0x00         // Cpu2Efb Z mode
+	#define PE_PI_CMODE0 0x02        // Cpu2Efb Color mode 0
+	#define PE_PI_CMODE1 0x04        // Cpu2Efb Color mode 1
+	#define PE_PI_ALPHA_THRES 0x06   // Cpu2Efb Alpha mode 0
+	#define PE_PI_CONTROL 0x08
+	#define PE_PI_INTRCTRL 0x0a
+	#define PE_PI_INTRSTAT 0x0c
+	#define PE_PI_TOKEN 0x0e         // Last token value
+	#define PE_PI_XBOUND0 0x10
+	#define PE_PI_XBOUND1 0x12
+	#define PE_PI_YBOUND0 0x14
+	#define PE_PI_YBOUND1 0x16
+	#define PE_PI_PERF_COUNTER_0L 0x18
+	#define PE_PI_PERF_COUNTER_0H 0x1a
+	#define PE_PI_PERF_COUNTER_1L 0x1c
+	#define PE_PI_PERF_COUNTER_1H 0x1e
+	#define PE_PI_PERF_COUNTER_2L 0x20
+	#define PE_PI_PERF_COUNTER_2H 0x22
+	#define PE_PI_PERF_COUNTER_3L 0x24
+	#define PE_PI_PERF_COUNTER_3H 0x26
+	#define PE_PI_PERF_COUNTER_4L 0x28
+	#define PE_PI_PERF_COUNTER_4H 0x2a
+	#define PE_PI_PERF_COUNTER_5L 0x2c
+	#define PE_PI_PERF_COUNTER_5H 0x2e
+
+	// PE intrctrl register
+	#define PE_SR_DONE      (1 << 0)
+	#define PE_SR_TOKEN     (1 << 1)
+	#define PE_SR_DONEMSK   (1 << 2)
+	#define PE_SR_TOKENMSK  (1 << 3)
+
+	// The register definitions for PE PI are slightly different from command stream PE registers because PE PI registers are 16-bit
+	// PE registers mapped to CPU
+	struct PERegs
+	{
+		uint16_t     sr;         // status register
+	};
+
+	// PE register definitions that come through the command stream.
+
+	// Pixel Engine
+	#define PE_ZMODE_ID 0x40
+	#define PE_CMODE0_ID 0x41
+	#define PE_CMODE1_ID 0x42
+	#define PE_CONTROL_ID 0x43
+	#define PE_FIELD_MASK_ID 0x44
+	#define PE_FINISH_ID 0x45
+	#define PE_REFRESH_ID 0x46
+	#define PE_TOKEN_ID 0x47
+	#define PE_TOKEN_INT_ID 0x48
+	#define PE_COPY_SRC_ADDR_ID 0x49
+	#define PE_COPY_SRC_SIZE_ID 0x4a
+	#define PE_COPY_DST_BASE0_ID 0x4b
+	#define PE_COPY_DST_BASE1_ID 0x4c
+	#define PE_COPY_DST_STRIDE_ID 0x4d
+	#define PE_COPY_SCALE_ID 0x4e
+	#define PE_COPY_CLEAR_AR_ID 0x4F
+	#define PE_COPY_CLEAR_GB_ID 0x50
+	#define PE_COPY_CLEAR_Z_ID 0x51
+	#define PE_COPY_CMD_ID 0x52
+	#define PE_COPY_VFILTER0_ID 0x53
+	#define PE_COPY_VFILTER1_ID 0x54
+	#define PE_XBOUND_ID 0x55
+	#define PE_YBOUND_ID 0x56
+	#define PE_PERFMODE_ID 0x57
+	#define PE_CHICKEN_ID 0x58
+	#define PE_QUAD_OFFSET_ID 0x59
+
+	// 0x40
+	union PE_ZMODE
+	{
+		struct
+		{
+			unsigned enable : 1;
+			unsigned func : 3;
+			unsigned mask : 1;
+			unsigned unused : 19;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x41
+	union PE_CMODE0
+	{
+		struct
+		{
+			unsigned blend_en : 1;
+			unsigned logop_en : 1;
+			unsigned dither_en : 1;
+			unsigned col_mask : 1;
+			unsigned alpha_mask : 1;
+			unsigned dfactor : 3;
+			unsigned sfactor : 3;
+			unsigned blendop : 1;
+			unsigned logop : 12;
+			unsigned unused : 8;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x42
+	union PE_CMODE1
+	{
+		struct
+		{
+			unsigned const_alpha : 8;
+			unsigned const_alpha_en : 1;
+			unsigned yuv : 2;
+			unsigned unused : 13;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x43
+	union PE_CONTROL
+	{
+		struct
+		{
+			unsigned pixtype : 3;
+			unsigned zcmode : 3;
+			unsigned ztop : 1;
+			unsigned unused : 17;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x44
+	union PE_FIELD_MASK
+	{
+		struct
+		{
+			unsigned even : 1;
+			unsigned odd : 1;
+			unsigned unused : 22;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x45
+	union PE_FINISH
+	{
+		struct
+		{
+			unsigned dst : 2;
+			unsigned unused : 22;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x46
+	union PE_REFRESH
+	{
+		struct
+		{
+			unsigned interval : 9;
+			unsigned enable : 1;
+			unsigned unused : 14;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x47
+	union PE_TOKEN
+	{
+		struct
+		{
+			unsigned token : 16;
+			unsigned unused : 8;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x48
+	union PE_TOKEN_INT
+	{
+		struct
+		{
+			unsigned token : 16;
+			unsigned unused : 8;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x49
+	union PE_COPY_SRC_ADDR
+	{
+		struct
+		{
+			unsigned x : 10;
+			unsigned y : 10;
+			unsigned unused : 4;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x4a
+	union PE_COPY_SRC_SIZE
+	{
+		struct
+		{
+			unsigned x : 10;
+			unsigned y : 10;
+			unsigned unused : 4;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x4b, 0x4c
+	union PE_COPY_DST_BASE
+	{
+		struct
+		{
+			unsigned base : 21;
+			unsigned unused : 3;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x4d
+	union PE_COPY_DST_STRIDE
+	{
+		struct
+		{
+			unsigned stride : 10;
+			unsigned unused : 14;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x4e
+	union PE_COPY_SCALE
+	{
+		struct
+		{
+			unsigned scale : 9;
+			unsigned unused : 15;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x4F
+	union PE_COPY_CLEAR_AR
+	{
+		struct
+		{
+			unsigned red : 8;
+			unsigned alpha : 8;
+			unsigned unused : 8;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x50
+	union PE_COPY_CLEAR_GB
+	{
+		struct
+		{
+			unsigned blue : 8;
+			unsigned green : 8;
+			unsigned unused : 8;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x51
+	union PE_COPY_CLEAR_Z
+	{
+		struct
+		{
+			unsigned value : 24;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// PE_COPY_CMD.opcode: where the copy engine writes the EFB rectangle (gfx-pe.md 5.6, 5.7).
+	enum PE_COPY_CMD_KIND
+	{
+		PE_COPY_CMD_TEXTURE = 0,		// the rectangle becomes a texture in main memory
+		PE_COPY_CMD_DISPLAY = 1,		// the rectangle becomes the XFB the video interface shows
+	};
+
+	// 0x52
+	union PE_COPY_CMD
+	{
+		struct
+		{
+			unsigned clamp_top : 1;
+			unsigned clamp_bottom : 1;
+			unsigned unused1 : 1;
+			unsigned tex_format_h : 1;
+			unsigned tex_format : 3;
+			unsigned gamma : 2;
+			unsigned mip_map_filter : 1;
+			unsigned vert_scale : 1;
+			unsigned clear : 1;
+			unsigned interlaced : 2;
+			unsigned opcode : 1;
+			unsigned ccv : 2;
+			unsigned unused2 : 7;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x53
+	union PE_VFILTER_0
+	{
+		struct
+		{
+			unsigned coeff0 : 6;
+			unsigned coeff1 : 6;
+			unsigned coeff2 : 6;
+			unsigned coeff3 : 6;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x54
+	union PE_VFILTER_1
+	{
+		struct
+		{
+			unsigned coeff4 : 6;
+			unsigned coeff5 : 6;
+			unsigned coeff6 : 6;
+			unsigned unused : 6;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x55
+	union PE_XBOUND
+	{
+		struct
+		{
+			unsigned left : 10;
+			unsigned right : 10;
+			unsigned unused : 4;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x56
+	union PE_YBOUND
+	{
+		struct
+		{
+			unsigned top : 10;
+			unsigned bottom : 10;
+			unsigned unused : 4;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x57
+	union PE_PERFMODE
+	{
+		struct
+		{
+			unsigned conter0 : 2;
+			unsigned conter1 : 2;
+			unsigned conter2 : 2;
+			unsigned conter3 : 2;
+			unsigned conter4 : 2;
+			unsigned conter5 : 2;
+			unsigned unused : 12;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x58
+	union PE_CHICKEN
+	{
+		struct
+		{
+			unsigned piwr : 1;
+			unsigned tx_copy_fmt : 1;
+			unsigned tx_copy_ccv : 1;
+			unsigned blendop : 1;
+			unsigned unused : 20;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0x59
+	union PE_QUAD_OFFSET
+	{
+		struct
+		{
+			unsigned x : 10;
+			unsigned y : 10;
+			unsigned pad : 4;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// color type
+	union Color
+	{
+		struct { uint8_t A, B, G, R; };
+		uint32_t     RGBA;
+	};
+
+	struct PEState
+	{
+		PE_ZMODE zmode;		// 0x40
+		PE_CMODE0 cmode0;	// 0x41
+		PE_CMODE1 cmode1;	// 0x42
+		PE_CONTROL control;	// 0x43
+		PE_FIELD_MASK field_mask; // 0x44
+		PE_FINISH finish;	// 0x45
+		PE_REFRESH refresh; // 0x46
+		PE_TOKEN token; // 0x47
+		PE_TOKEN_INT token_int; // 0x48
+		PE_COPY_SRC_ADDR copy_src_addr;	// 0x49
+		PE_COPY_SRC_SIZE copy_src_size;	// 0x4a
+		PE_COPY_DST_BASE copy_dst_base[2];	// 0x4b, 0x4c
+		PE_COPY_DST_STRIDE copy_dst_stride;	// 0x4d
+		PE_COPY_SCALE copy_scale;	// 0x4e
+		PE_COPY_CLEAR_AR copy_clear_ar;	// 0x4F
+		PE_COPY_CLEAR_GB copy_clear_gb;	// 0x50
+		PE_COPY_CLEAR_Z copy_clear_z;	// 0x51
+		PE_COPY_CMD copy_cmd;	// 0x52
+		PE_VFILTER_0 vfilter_0;	// 0x53
+		PE_VFILTER_1 vfilter_1;	// 0x54
+		PE_XBOUND xbound;	// 0x55
+		PE_YBOUND ybound;	// 0x56
+		PE_PERFMODE perfmode;	// 0x57
+		PE_CHICKEN chicken;  // 0x58
+		PE_QUAD_OFFSET quad_offset;  // 0x59
+	};
+
+	class PixelEngine
+	{
+		friend GFXCore;
+		GFXCore* gfx = nullptr;
+
+		size_t frames = 0;
+		size_t pe_done_num = 0;   // number of drawdone (PE_FINISH) events
+
+		//! The clear values of a PE_COPY_CMD that asked for one, captured when the command was
+		//! issued. A texture copy's clear runs with the copy; a display copy's clear runs at the
+		//! next frame begin (it prepares the EFB for the frame that follows the copy, and doing it
+		//! on arrival would wipe the frame that is still to be displayed). Capturing the values
+		//! matters because by then the game may already have programmed the registers for its next
+		//! copy: reading the live registers there used the wrong Z, which left the depth buffer of
+		//! Metroid Prime at Z=0 and made its LEQUAL depth test reject every draw (issue #349).
+		struct CopyClearState
+		{
+			PE_COPY_CLEAR_AR ar{};
+			PE_COPY_CLEAR_GB gb{};
+			PE_COPY_CLEAR_Z z{};
+
+			//! The rectangle the copy reads. The clear engine turns the quads it reads into the
+			//! clear colour and leaves the rest of the EFB alone (gfx-pe.md 5.1).
+			int x = 0, y = 0, w = 0, h = 0;
+
+			//! A display copy hands the frame over to the video interface, and this backend shows the
+			//! EFB where a console shows the XFB, so its clear has to cover the whole colour buffer:
+			//! whatever the copy does not read is still on screen, and leaving it there kept the
+			//! previous frame in the lower half of the bootrom's splash.
+			bool full = false;
+		};
+
+		//! The display copies of the frame that is being drawn each clear their own rectangle, and a
+		//! single frame can present in several of them: the bootrom writes its picture with three
+		//! copies per frame (one per field, their rectangles together covering the screen). They are
+		//! all kept until the frame is restarted - keeping only the last one cleared a two-row strip
+		//! and left the rest of the previous picture on the screen.
+		static const size_t MaxPendingCopyClears = 16;
+		CopyClearState pending_clears[MaxPendingCopyClears]{};
+		size_t pending_clear_count = 0;
+
+		PERegs peregs{};	// PE PI regs
+
+		PEState pe{};		// Internal PE state
+
+		void GL_DoSnapshot(bool sel, FILE* f, uint8_t* dst, int width, int height);
+		void GL_SaveBitmap(uint8_t* buf);
+
+		void PE_DONE_INT();
+		void PE_TOKEN_INT();
+
+		// -------------------------------------------------------------------------------------
+		// Software pipeline (GFX_PIPELINE = soft, issue #384)
+		//
+		// The software Pixel Engine owns a CPU-side EFB: a colour buffer with one 32-bit word per
+		// pixel and the matching 24-bit Z buffer (gfx-pe.md 3). It performs the RMW datapath of
+		// gfx-pe.md 4 - the Z test, the blend / logic op with the write masks (4.2, 4.3) - and the
+		// copy engine: the display copy that turns the EFB into the XFB the video interface scans
+		// out (5.6) and the texture copy that re-packs a rectangle into main memory (5.7).
+		//
+		// There is no GL frame at all in this pipeline, so the EFB is not a render target that is
+		// presented: the XFB in main memory is what the console shows.
+		// -------------------------------------------------------------------------------------
+
+		//! The EFB memory array (gfx-pe.md 3.3). It is addressed like the CPU window of the
+		//! hardware: the word of the colour pixel (x, y) sits at `y * 1024 + x` and the address
+		//! bit 22 selects the Z plane (`PixelEngine::EfbZPlane` words into the array). The colour
+		//! word is the CPU view of the eDRAM lane - `{blue, green, red, alpha}` from the low byte
+		//! up - and the Z word carries the 24-bit depth.
+		std::vector<uint32_t> efb;
+		int soft_w = 0, soft_h = 0;
+
+		void SoftAlloc();
+		void SoftClearRect(int x, int y, int w, int h, uint32_t rgba, uint32_t z);
+
+		//! The copy engine's display copy (gfx-pe.md 5.6): the EFB rectangle is converted to the
+		//! packed YUV 4:2:2 XFB in main memory that the video interface reads.
+		void SoftDisplayCopy();
+
+		// Pixel Engine mapped regs
+		static void PERegRead(uint32_t addr, uint32_t* reg, void* context);
+		static void PERegWrite(uint32_t addr, uint32_t data, void* context);
+
+	public:
+		//! Apply the depth state that PE_ZMODE, PE_CONTROL and GEN_MODE.zfreeze describe. The Setup
+		//! Unit calls it as well, because zfreeze lives in the shared GEN_MODE register.
+		void ApplyZMode();
+
+		//! Apply the blending, logic-op, write-mask and dither state of PE_CMODE0 / PE_CMODE1.
+		void ApplyColorMode();
+
+		//! The copy engine's clear operation (PE_COPY_CMD with the clear bit set).
+		void ApplyCopyClear(const CopyClearState& clear);
+
+		//! Apply the clears the display copies of the previous frame asked for (see the PE_COPY_CMD
+		//! handling). They are performed by the frame begin, because they prepare the EFB for the
+		//! frame that follows the copy: doing it the moment the copy command arrives would wipe the
+		//! frame that is about to be displayed (the swap happens later, on PE_FINISH or on a
+		//! full-frame display copy). Returns false when nothing was pending.
+		bool ApplyPendingCopyClears();
+
+		PixelEngine(Flipper::Flipper* flipper, HWConfig *config, GFXCore *parent_gfx);
+		~PixelEngine();
+
+		uint32_t EfbPeek(uint32_t addr);
+		void EfbPoke(uint32_t addr, uint32_t value);
+
+		void loadPEReg(size_t index, uint32_t value);
+
+		//! Put the PE register state back into the reset state and restore the GL state it owns.
+		void Reset();
+
+		//! The copy engine's texture copy (PE_COPY_CMD.opcode = texture): the EFB rectangle named
+		//! by the copy registers is re-packed into the tiled texture format of the destination and
+		//! written to main memory (gfx-pe.md 5.7). The clear that a copy may ask for is applied by
+		//! the frame begin instead (see ApplyCopyClear).
+		void TextureCopy();
+
+		//! The software EFB (GFX_PIPELINE = soft). `SoftBeginFrame` applies the clears the display
+		//! copies of the previous frame asked for and is the equivalent of the GL frame begin.
+		void SoftBeginFrame();
+
+		//! Depth test, blend and write one shaded sample into the software EFB (the RMW datapath of
+		//! gfx-pe.md 4). Returns false when the depth test rejected the sample or the coordinate is
+		//! outside the EFB.
+		bool SoftWritePixel(int x, int y, const float rgba[4], float depth);
+
+		//! The software EFB of the debugger's `gxpixel`: the colour and the depth of one pixel.
+		bool SoftPixel(int x, int y, uint8_t rgba[4], uint32_t* z);
+
+
+		//! Read a rectangle of the EFB into an RGB buffer, top row first. The rectangle is in screen
+		//! coordinates (the origin is the top left corner). Returns false when the frame loop does
+		//! not own the GL context, so that the caller can leave the EFB alone.
+		bool ReadEfb(int x, int y, int width, int height, std::vector<uint8_t>& rgb);
+
+		//! The PE register state (read-only; used by the debugger and the unit tests).
+		const PEState& State() const { return pe; }
+		const PERegs& Regs() const { return peregs; }
+		size_t Frames() const { return frames; }
+	};
+}

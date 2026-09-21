@@ -1,0 +1,658 @@
+// GFX Command Processor
+#pragma once
+
+// With CP it's very complicated, this component has spread its tentacles almost all over the Flipper chip:
+// - There is an interface with PI so that Gekko can do burst transactions in FIFO (PI_CPMappedRegister)
+// - There is another interface where some CP registers are mapped to the HW address space (CPMappedRegister)
+// - CP registers can also be accessed using FIFO commands (CP_CMD_LOAD_CPREG)
+// I'll describe how CP works a little later, but I get the impression that the developers in the process of
+// development twisted it this way and that and it turned out "well, this". It could have been made prettier :)
+
+// Vertex Cache is not supported.
+
+// CP Registers (from CPU side). 16-bit access
+#define CP_STATUS 0x00
+#define CP_ENABLE 0x02
+#define CP_CLR 0x04
+#define CP_MEMPERF_SEL 0x06
+#define CP_STM_LOW 0x0a
+#define CP_FIFO_BASEL 0x20
+#define CP_FIFO_BASEH 0x22
+#define CP_FIFO_TOPL 0x24
+#define CP_FIFO_TOPH 0x26
+#define CP_FIFO_HICNTL 0x28
+#define CP_FIFO_HICNTH 0x2a
+#define CP_FIFO_LOCNTL 0x2c
+#define CP_FIFO_LOCNTH 0x2e
+#define CP_FIFO_COUNTL 0x30
+#define CP_FIFO_COUNTH 0x32
+#define CP_FIFO_WPTRL 0x34
+#define CP_FIFO_WPTRH 0x36
+#define CP_FIFO_RPTRL 0x38
+#define CP_FIFO_RPTRH 0x3a
+#define CP_FIFO_BRKL 0x3c
+#define CP_FIFO_BRKH 0x3e
+#define CP_COUNTER0L 0x40
+#define CP_COUNTER0H 0x42
+#define CP_COUNTER1L 0x44
+#define CP_COUNTER1H 0x46
+#define CP_COUNTER2L 0x48
+#define CP_COUNTER2H 0x4a
+#define CP_COUNTER3L 0x4c
+#define CP_COUNTER3H 0x4e
+#define CP_VC_CHKCNTL 0x50
+#define CP_VC_CHKCNTH 0x52
+#define CP_VC_MISSL 0x54
+#define CP_VC_MISSH 0x56
+#define CP_VC_STALLL 0x58
+#define CP_VC_STALLH 0x5a
+#define CP_FRCLK_CNTL 0x5c
+#define CP_FRCLK_CNTH 0x5e
+#define CP_XF_ADDR 0x60
+#define CP_XF_DATAL 0x62
+#define CP_XF_DATAH 0x64
+
+// CP STATUS register mask layout
+#define CP_SR_OVF       (1 << 0)        // FIFO overflow (fifo_count > FIFO_HICNT)
+#define CP_SR_UVF       (1 << 1)        // FIFO underflow (fifo_count < FIFO_LOCNT)
+#define CP_SR_RD_IDLE   (1 << 2)        // FIFO read unit idle
+#define CP_SR_CMD_IDLE  (1 << 3)        // CP idle
+#define CP_SR_BPINT     (1 << 4)        // FIFO reach break point (cleared by disable FIFO break point)
+
+// CP ENABLE register mask layout
+#define CP_CR_RDEN      (1 << 0)        // Enable FIFO reads, reset value is 0 disable
+#define CP_CR_BPEN      (1 << 1)        // FIFO break point enable bit, reset value is 0 disable. Write 0 to clear BPINT
+#define CP_CR_OVFEN     (1 << 2)        // FIFO overflow interrupt enable, reset value is 0 disable
+#define CP_CR_UVFEN     (1 << 3)        // FIFO underflow interrupt enable, reset value is 0 disable
+#define CP_CR_WPINC     (1 << 4)        // FIFO write pointer increment enable, reset value is 1 enable
+#define CP_CR_BPINTEN   (1 << 5)        // FIFO break point interrupt enable, reset value is 0 disable
+
+// CP clear register mask layout
+#define CP_CLR_OVFCLR   (1 << 0)        // clear FIFO overflow interrupt
+#define CP_CLR_UVFCLR   (1 << 1)        // clear FIFO underflow interrupt
+
+
+namespace Flipper
+{
+
+	// CP Commands. Format of commands transmitted via FIFO and display lists (DL)
+
+	enum CPCommand : uint8_t
+	{
+		CP_CMD_NOP = 0x00,					// 00000 xxx
+		CP_CMD_LOAD_CPREG = 0x08,			// 00001 xxx, Address[7:0], 32 bits data
+		CP_CMD_LOAD_XFREG = 0x10,			// 00010 xxx
+		CP_CMD_LOAD_INDXA = 0x20,			// 00100 xxx
+		CP_CMD_LOAD_INDXB = 0x28,			// 00101 xxx
+		CP_CMD_LOAD_INDXC = 0x30,			// 00110 xxx
+		CP_CMD_LOAD_INDXD = 0x38,			// 00111 xxx
+		CP_CMD_CALL_DL = 0x40,				// 01000 xxx
+		CP_CMD_VCACHE_INVD = 0x48,			// 01001 xxx
+		CP_CMD_LOAD_BPREG = 0x60,			// 0110x xxx, Address[7:0], 24 bits data
+		CP_CMD_DRAW_QUAD = 0x80,			// 10000 vat(2:0)
+		CP_CMD_DRAW_QUAD_STRIP = 0x88,		// 10001 vat(2:0)
+		CP_CMD_DRAW_TRIANGLE = 0x90,		// 10010 vat(2:0)
+		CP_CMD_DRAW_STRIP = 0x98,			// 10011 vat(2:0)
+		CP_CMD_DRAW_FAN = 0xA0,				// 10100 vat(2:0)
+		CP_CMD_DRAW_LINE = 0xA8,			// 10101 vat(2:0)
+		CP_CMD_DRAW_LINESTRIP = 0xB0,		// 10110 vat(2:0)
+		CP_CMD_DRAW_POINT = 0xB8,			// 10111 vat(2:0)
+	};
+
+	#pragma pack(push, 8)
+
+	// CPU CP registers
+	struct CPHostRegs
+	{
+		uint16_t     sr;         // status
+		uint16_t     cr;         // control
+		union
+		{
+			struct
+			{
+				uint16_t basel;
+				uint16_t baseh;
+			};
+			volatile uint32_t     base;
+		};
+		union
+		{
+			struct
+			{
+				uint16_t topl;
+				uint16_t toph;
+			};
+			volatile uint32_t     top;
+		};
+		union
+		{
+			struct
+			{
+				uint16_t lomarkl;
+				uint16_t lomarkh;
+			};
+			volatile uint32_t     lomark;
+		};
+		union
+		{
+			struct
+			{
+				uint16_t himarkl;
+				uint16_t himarkh;
+			};
+			volatile uint32_t     himark;
+		};
+		union
+		{
+			struct
+			{
+				uint16_t cntl;
+				uint16_t cnth;
+			};
+			volatile uint32_t     cnt;
+		};
+		union
+		{
+			struct
+			{
+				uint16_t wrptrl;
+				uint16_t wrptrh;
+			};
+			volatile uint32_t     wrptr;
+		};
+		union
+		{
+			struct
+			{
+				uint16_t rdptrl;
+				uint16_t rdptrh;
+			};
+			volatile uint32_t     rdptr;
+		};
+		union
+		{
+			struct
+			{
+				uint16_t bpptrl;
+				uint16_t bpptrh;
+			};
+			volatile uint32_t     bpptr;
+		};
+		uint32_t     xfAddr;     // XF register address (CP_XF_ADDR) for the CP -> XF read-back path
+		uint32_t     xfData;     // XF register read-back data (CP_XF_DATAL / CP_XF_DATAH)
+	};
+
+	#pragma pack(pop)
+
+	// CP Registers (from GX side). These registers are available only for writing, with the CP_LoadRegs command
+
+	enum CPRegister : size_t
+	{
+		CP_VC_STAT_RESET_ID = 0x00,
+		CP_STAT_ENABLE_ID = 0x10,
+		CP_STAT_SEL_ID = 0x20,
+		CP_MATINDEX_A_ID = 0x30,			// MatrixIndexA 0011xxxx 
+		CP_MATINDEX_B_ID = 0x40,			// MatrixIndexB 0100xxxx 
+		CP_VCD_LO_ID = 0x50,				// VCD_Lo 0101xxxx
+		CP_VCD_HI_ID = 0x60,				// VCD_Hi 0110xxxx
+		CP_VAT_A_ID = 0x70,					// VAT_group0 0111x,vat[2:0]
+		CP_VAT_B_ID = 0x80,					// VAT_group1 1000x,vat[2:0]
+		CP_VAT_C_ID = 0x90,					// VAT_group2 1001x,vat[2:0]
+		CP_ARRAY_BASE_ID = 0xa0,			// ArrayBase 1001,array[3:0]
+		CP_ARRAY_STRIDE_ID = 0xb0,			// ArrayStride 1011,array[3:0]
+	};
+
+	// Vertex attributes.
+	// Specifies the sequence of attributes in the raw vertex data. Which of the attributes are present is selected by the VCD settings.
+
+	enum VertexAttr : size_t
+	{
+		VTX_POS = 0,            // Position
+		VTX_NRM,                // Normal
+		VTX_BINRM,				// Binormal
+		VTX_TANGENT,			// Tangent
+		VTX_COLOR0,             // Color 0
+		VTX_COLOR1,             // Color 1
+		VTX_TEXCOORD0,          // Texture Coordinate 0
+		VTX_TEXCOORD1,          // Texture Coordinate 1
+		VTX_TEXCOORD2,          // Texture Coordinate 2
+		VTX_TEXCOORD3,          // Texture Coordinate 3
+		VTX_TEXCOORD4,          // Texture Coordinate 4
+		VTX_TEXCOORD5,          // Texture Coordinate 5
+		VTX_TEXCOORD6,          // Texture Coordinate 6
+		VTX_TEXCOORD7,          // Texture Coordinate 7
+		VTX_MATIDX0,			// Matrix indicies 0
+		VTX_MATIDX1,			// Matrix indicies 1
+		VTX_MAX_ATTR
+	};
+
+	// Attribute types (from VCD register)
+
+	enum AttrType : unsigned
+	{
+		VCD_NONE = 0,           // attribute stage disabled
+		VCD_DIRECT,             // direct data
+		VCD_INDEX8,				// 8-bit indexed data
+		VCD_INDEX16             // 16-bit indexed data
+	};
+
+	// Vertex Components Count (from VAT register)
+
+	enum VatPosCount : unsigned
+	{
+		VCNT_POS_XY = 0,		// two (x,y)
+		VCNT_POS_XYZ = 1,		// three (x,y,z)
+	};
+
+	enum VatNormCount : unsigned
+	{
+		VCNT_NRM_XYZ = 0,		// three normals
+		VCNT_NRM_NBT = 1,		// nine normals
+	};
+
+	enum VatColorCount : unsigned
+	{
+		VCNT_CLR_RGB = 0,		// three (r,g,b)
+		VCNT_CLR_RGBA = 1,		// four (r,g,b,a)
+	};
+
+	enum VatTexCoordCount : unsigned
+	{
+		VCNT_TEX_S = 0,			// one (s)
+		VCNT_TEX_ST = 1			// two (s,t)
+	};
+
+	// Vertex Component Format (from VAT register)
+
+	enum VatCompFormat : unsigned
+	{
+		// For Components (normal, coords)
+		VFMT_U8 = 0,			// ubyte
+		VFMT_S8 = 1,			// byte
+		VFMT_U16 = 2,			// ushort
+		VFMT_S16 = 3,			// short
+		VFMT_F32 = 4,			// float
+	};
+
+	// Vertex Color Format (from VAT register)
+
+	enum VatColorFormat : unsigned
+	{
+		VFMT_RGB565 = 0,		// 16 bit 565 (three comp)
+		VFMT_RGB8 = 1,			// 24 bit 888 (three comp)
+		VFMT_RGBX8 = 2,			// 32 bit 888x (three comp)
+		VFMT_RGBA4 = 3,			// 16 bit 4444 (four comp)
+		VFMT_RGBA6 = 4,			// 24 bit 6666 (four comp)
+		VFMT_RGBA8 = 5			// 32 bit 8888 (four comp)
+	};
+
+	#pragma pack(push, 1)
+
+	union MatrixIndexA
+	{
+		struct
+		{
+			unsigned PosNrmIndex : 6;
+			unsigned Tex0Index : 6;
+			unsigned Tex1Index : 6;
+			unsigned Tex2Index : 6;
+			unsigned Tex3Index : 6;
+		};
+		uint32_t bits;
+	};
+
+	union MatrixIndexB
+	{
+		struct
+		{
+			unsigned Tex4Index : 6;
+			unsigned Tex5Index : 6;
+			unsigned Tex6Index : 6;
+			unsigned Tex7Index : 6;
+		};
+		uint32_t bits;
+	};
+
+	union VCD_Lo
+	{
+		struct
+		{
+			unsigned PosNrmMatIdx : 1;
+			unsigned Tex0MatIdx : 1;
+			unsigned Tex1MatIdx : 1;
+			unsigned Tex2MatIdx : 1;
+			unsigned Tex3MatIdx : 1;
+			unsigned Tex4MatIdx : 1;
+			unsigned Tex5MatIdx : 1;
+			unsigned Tex6MatIdx : 1;
+			unsigned Tex7MatIdx : 1;
+			unsigned Position : 2;		// AttrType
+			unsigned Normal : 2;		// AttrType
+			unsigned Color0 : 2;		// AttrType
+			unsigned Color1 : 2;		// AttrType
+		};
+		uint32_t bits;
+	};
+
+	union VCD_Hi
+	{
+		struct
+		{
+			unsigned Tex0Coord : 2;		// AttrType
+			unsigned Tex1Coord : 2;		// AttrType
+			unsigned Tex2Coord : 2;		// AttrType
+			unsigned Tex3Coord : 2;		// AttrType
+			unsigned Tex4Coord : 2;		// AttrType
+			unsigned Tex5Coord : 2;		// AttrType
+			unsigned Tex6Coord : 2;		// AttrType
+			unsigned Tex7Coord : 2;		// AttrType
+		};
+		uint32_t bits;
+	};
+
+	union VAT_group0
+	{
+		struct
+		{
+			unsigned	poscnt : 1;
+			unsigned	posfmt : 3;
+			unsigned	posshft : 5;			// Location of decimal point from LSB. This shift applies to all u/short components and to u/byte components where ByteDequant is asserted
+			unsigned    nrmcnt : 1;
+			unsigned	nrmfmt : 3;				// Normal location of decimal point predefined as follow: Byte: 6, Short: 14
+			unsigned    col0cnt : 1;
+			unsigned	col0fmt : 3;
+			unsigned    col1cnt : 1;
+			unsigned	col1fmt : 3;
+			unsigned    tex0cnt : 1;
+			unsigned	tex0fmt : 3;
+			unsigned 	tex0shft : 5;
+			unsigned	bytedeq : 1;			// Shift applies for u/byte and u/short components of position and texture attributes.
+			unsigned 	nrmidx3 : 1;			// When nine normals selected in indirect mode, input will be treated as three staggered indices (one per triple biased by component size), into normal table.
+		};
+		uint32_t bits;
+	};
+
+	union VAT_group1
+	{
+		struct
+		{
+			unsigned    tex1cnt : 1;
+			unsigned	tex1fmt : 3;
+			unsigned 	tex1shft : 5;
+			unsigned    tex2cnt : 1;
+			unsigned	tex2fmt : 3;
+			unsigned 	tex2shft : 5;
+			unsigned    tex3cnt : 1;
+			unsigned	tex3fmt : 3;
+			unsigned 	tex3shft : 5;
+			unsigned    tex4cnt : 1;
+			unsigned	tex4fmt : 3;
+			unsigned 	vcache : 1;
+		};
+		uint32_t bits;
+	};
+
+	union VAT_group2
+	{
+		struct
+		{
+			unsigned 	tex4shft : 5;
+			unsigned    tex5cnt : 1;
+			unsigned	tex5fmt : 3;
+			unsigned	tex5shft : 5;
+			unsigned    tex6cnt : 1;
+			unsigned	tex6fmt : 3;
+			unsigned	tex6shft : 5;
+			unsigned    tex7cnt : 1;
+			unsigned	tex7fmt : 3;
+			unsigned 	tex7shft : 5;
+		};
+		uint32_t bits;
+	};
+
+	union ArrayBase
+	{
+		struct
+		{
+			unsigned  Base : 26;
+		};
+		uint32_t bits;
+	};
+
+	union ArrayStride
+	{
+		struct
+		{
+			unsigned  Stride : 8;
+		};
+		uint32_t bits;
+	};
+
+	// Array name for ArrayBase and ArrayStride
+
+	enum class ArrayId
+	{
+		Pos = 0,
+		Nrm,
+		Color0,
+		Color1,
+		Tex0Coord,
+		Tex1Coord,
+		Tex2Coord,
+		Tex3Coord,
+		Tex4Coord,
+		Tex5Coord,
+		Tex6Coord,
+		Tex7Coord,
+
+		// Used by XF_IndexLoadRegA/B/C/D commands
+
+		IndexRegA,
+		IndexRegB,
+		IndexRegC,
+		IndexRegD,
+
+		Max,
+	};
+
+	struct CPState
+	{
+		MatrixIndexA matIndexA;			// 0011xxxx
+		MatrixIndexB matIndexB;				// 0100xxxx
+		VCD_Lo vcdLo;				// 0101xxxx
+		VCD_Hi vcdHi;				// 0110xxxx
+		VAT_group0 vatA[8];			// 0111x,vat[2:0]
+		VAT_group1 vatB[8];			// 1000x,vat[2:0]
+		VAT_group2 vatC[8];			// 1001x,vat[2:0]	
+		ArrayBase arrayBase[(size_t)ArrayId::Max];		// 1010,array[3:0]
+		ArrayStride arrayStride[(size_t)ArrayId::Max];	// 1011,array[3:0]
+	};
+
+	#pragma pack(pop)
+
+	//! The CP counters of the current frame (they are cleared by ResetFrameStats at every frame end).
+	struct CommandProcessorStats
+	{
+		size_t cpLoads = 0;			// CP register loads
+		size_t xfLoads = 0;			// XF register words
+		size_t bpLoads = 0;			// bypass (BP) register loads
+		size_t tris = 0;			// triangles
+		size_t points = 0;
+		size_t lines = 0;
+	};
+
+	class CommandProcessor;
+
+	class FifoProcessor
+	{
+		size_t fifoSize = 1024 * 1024;
+		uint8_t* fifo = nullptr;
+		size_t readPtr = 0;
+		size_t writePtr = 0;
+		bool allocated = false;
+
+		//! The CP that owns this stream. The vertex format state (VCD / VAT) belongs to the CP,
+		//! not to the stream: a display list sees the formats the main stream had when it was
+		//! called, and a list that loads them changes them for the main stream too. Keeping the
+		//! state in one place is also what the hardware does - the parser and the vertex fetch
+		//! read the same registers.
+		CommandProcessor* owner = nullptr;
+
+		SpinLock lock;
+
+	public:
+		size_t GetSize();
+		bool EnoughToExecute();
+
+		//! Size in bytes of one vertex of the given vertex attribute table, from the live VCD /
+		//! VAT registers.
+		size_t VertexSize(unsigned vat);
+
+		uint8_t Read8();
+		uint16_t Read16();
+		uint32_t Read32();
+		float ReadFloat();
+
+		uint8_t Peek8(size_t offset);
+		uint8_t Peek16(size_t offset);
+
+		void ExecuteCommand();
+
+		FifoProcessor(CommandProcessor* owner);
+		FifoProcessor(uint8_t* fifoPtr, size_t size, CommandProcessor* owner);	// Call FIFO
+		~FifoProcessor();
+
+		void PushBytes(uint8_t dataPtr[32]);
+
+		void Reset();
+	};
+
+	class CommandProcessor
+	{
+	private:
+		// logging
+		bool logOpcode = false;
+		bool logDrawCommands = false;
+		bool GpRegsLog = false;
+
+		// primitive counters
+		size_t tris = 0, pts = 0, lines = 0;
+
+		void CP_BREAK();
+		bool AtBreakPoint() const;
+		void CP_OVF();
+		void CP_UVF();
+
+		static void CPThread(void* Param);
+
+		FifoProcessor* fifo = nullptr;	// Internal CP FIFO
+
+		// Debug
+		void DumpCPFIFO();
+
+		CPHostRegs cpregs{};	// Mapped command processor registers
+		CPState cp{};			// Internal registers (for setting VCD/VAT, etc.)
+
+		Thread* cp_thread = nullptr;     // CP FIFO thread
+		size_t	tickPerFifo = 0;
+		int64_t	updateTbrValue = 0;
+
+		// The CP thread must not busy-wait on the CPU's time base: it is woken instead, every
+		// `FifoBatch` FIFO entries' worth of emulated ticks, through this event (see CPThread).
+		// `lastDrainTick` is the tick the thread last drained the FIFO at, so that the drain stays
+		// at the emulated CP rate even when the thread was not scheduled for a while.
+		static const size_t FifoBatch = 16;
+
+		Event fifoEvent;
+		int64_t lastDrainTick = 0;
+
+		//! Serializes the FIFO drains, so that the reader cannot be re-entered from a second
+		//! thread while it is walking the command stream.
+		SpinLock fifoLock;
+
+		// Stats
+		size_t cpLoads = 0;
+		size_t xfLoads = 0;
+		size_t bpLoads = 0;
+
+		void GXWriteFifo(uint8_t dataPtr[32]);
+		void loadCPReg(size_t index, uint32_t value);
+		std::string AttrToString(VertexAttr attr);
+		int gx_vtxsize(unsigned v);
+		void* GetArrayPtr(ArrayId arrayId, int idx, int compSize);
+		void LoadIndexedXF(ArrayId arrayId, FifoProcessor* gxfifo);
+		void FetchComp(float* comp, int count, int type, int fmt, int shft, FifoProcessor* gxfifo, ArrayId arrayId);
+		void FetchNorm(float* comp, int count, int type, int fmt, int shft, FifoProcessor* gxfifo, ArrayId arrayId, bool nrmidx3);
+		GFX::Color FetchColor(int type, int fmt, FifoProcessor* gxfifo, ArrayId arrayId);
+		void FifoWalk(unsigned vatnum, GFX::Vertex* vtx, FifoProcessor* gxfifo, const GFX::MatrixIndex0& matIdx0, const GFX::MatrixIndex1& matIdx1);
+		void GxBadFifo(uint8_t command);
+		void GxCommand(FifoProcessor* gxfifo);
+
+		//! The CP -> XF handshake: every word the CP pushes into the XF goes through here, which
+		//! picks up XF read-back data while the XF is busy (see xf.h)
+		void XFSync();
+
+		//! Read an XF register over the CP -> XF read-back path. The value is also latched in
+		//! CP_XF_DATAL / CP_XF_DATAH, where the CPU can pick it up
+		uint32_t ReadXFReg(size_t index);
+
+		//! Execute one draw command: unpack its vertices and push them into the XF
+		void DrawPrimitive(uint8_t command, FifoProcessor* gxfifo, GFX::RAS_Primitive prim);
+
+		static void CPRegRead(uint32_t addr, uint32_t* reg, void* context);
+		static void CPRegWrite(uint32_t addr, uint32_t data, void* context);
+
+		// CP Registers
+		uint16_t CpReadReg(uint32_t addr);
+		void CpWriteReg(uint32_t addr, uint16_t value);
+
+		//! The live FIFO occupancy (write pointer minus read pointer, over the ring), in 32-byte
+		//! units. This is what CP_FIFO_COUNT reports and what the water marks are compared against.
+		void FifoCount(uint32_t* count) const;
+
+	public:
+		CommandProcessor(Flipper* flipper, HWConfig* config);
+		~CommandProcessor();
+
+		// Streaming FIFO burst write notification from PI
+		void FifoWriteBurst();
+
+		/// <summary>
+		/// Called by the CPU thread (through Flipper::Update) every Flipper tick step, so that the
+		/// CP thread is woken when the emulated CP has a batch of FIFO entries to consume.
+		/// </summary>
+		void TickSync(int64_t ticks);
+
+		void CPAbortFifo();
+
+		void ResetFrameStats();
+
+		//! The frame counters, for the debug interface (`gxframes`, `gxregs cp`).
+		void GetStats(CommandProcessorStats* stats) const;
+
+		//! Drop the decoded command stream the CP has buffered (the CP-side FIFO), so that a new
+		//! command stream starts from an empty buffer. The unit tests use it to isolate one test
+		//! stream from the next; CPAbortFifo (CP_ABORT) is the guest-visible equivalent.
+		void ResetFifoProcessor();
+
+		//! Size in bytes of one vertex of the given vertex attribute table, computed from the live
+		//! VCD / VAT registers. The FIFO parser sizes a draw command with it before the vertex
+		//! walk consumes the data, so both have to use the same, current state.
+		size_t VertexSize(unsigned vat);
+
+		//! Drain the graphics FIFO once: exactly the work the CP thread does on one tick. The unit
+		//! tests use it to run the command stream deterministically, without the emulator threads.
+		void PumpFifo();
+
+		//! Drain the FIFO entries the emulated CP owes at the current point of the time base. The
+		//! reader's progress follows the emulated time, not how often the host happens to run the
+		//! CP thread; it is driven from that thread only.
+		void DrainFifo();
+
+		//! Whether the CP thread has anything to do this tick. It is what the CP thread tests
+		//! before calling PumpFifo, so a test that drives the FIFO by hand uses it too: the break
+		//! point is *reported* from PumpFifo, and a gate that hides it here would leave the status
+		//! bit and the CP interrupt unraised.
+		bool HasFifoWork();
+	};
+}

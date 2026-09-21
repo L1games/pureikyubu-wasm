@@ -1,0 +1,408 @@
+// Texture Environment Unit (TEV)
+
+// The TEV is emulated by a fragment shader that is generated on the fly from the register state.
+// See specs: gfx-tev.md (registers 0xC0-0xFD, RAS1_TREF bindings from gfx-ras1.md).
+
+#pragma once
+
+namespace GFX
+{
+	class GLProgram;
+
+	// TEV Regs
+	#define TEV_COLOR_ENV_0_ID 0xC0
+	#define TEV_ALPHA_ENV_0_ID 0xC1
+	#define TEV_COLOR_ENV_1_ID 0xC2
+	#define TEV_ALPHA_ENV_1_ID 0xC3
+	#define TEV_COLOR_ENV_2_ID 0xC4
+	#define TEV_ALPHA_ENV_2_ID 0xC5
+	#define TEV_COLOR_ENV_3_ID 0xC6
+	#define TEV_ALPHA_ENV_3_ID 0xC7
+	#define TEV_COLOR_ENV_4_ID 0xC8
+	#define TEV_ALPHA_ENV_4_ID 0xC9
+	#define TEV_COLOR_ENV_5_ID 0xCA
+	#define TEV_ALPHA_ENV_5_ID 0xCB
+	#define TEV_COLOR_ENV_6_ID 0xCC
+	#define TEV_ALPHA_ENV_6_ID 0xCD
+	#define TEV_COLOR_ENV_7_ID 0xCE
+	#define TEV_ALPHA_ENV_7_ID 0xCF
+	#define TEV_COLOR_ENV_8_ID 0xD0
+	#define TEV_ALPHA_ENV_8_ID 0xD1
+	#define TEV_COLOR_ENV_9_ID 0xD2
+	#define TEV_ALPHA_ENV_9_ID 0xD3
+	#define TEV_COLOR_ENV_A_ID 0xD4
+	#define TEV_ALPHA_ENV_A_ID 0xD5
+	#define TEV_COLOR_ENV_B_ID 0xD6
+	#define TEV_ALPHA_ENV_B_ID 0xD7
+	#define TEV_COLOR_ENV_C_ID 0xD8
+	#define TEV_ALPHA_ENV_C_ID 0xD9
+	#define TEV_COLOR_ENV_D_ID 0xDA
+	#define TEV_ALPHA_ENV_D_ID 0xDB
+	#define TEV_COLOR_ENV_E_ID 0xDC
+	#define TEV_ALPHA_ENV_E_ID 0xDD
+	#define TEV_COLOR_ENV_F_ID 0xDE
+	#define TEV_ALPHA_ENV_F_ID 0xDF
+
+	#define TEV_REGISTERL_0_ID 0xE0
+	#define TEV_REGISTERH_0_ID 0xE1
+	#define TEV_REGISTERL_1_ID 0xE2
+	#define TEV_REGISTERH_1_ID 0xE3
+	#define TEV_REGISTERL_2_ID 0xE4
+	#define TEV_REGISTERH_2_ID 0xE5
+	#define TEV_REGISTERL_3_ID 0xE6
+	#define TEV_REGISTERH_3_ID 0xE7
+	#define TEV_RANGE_ADJ_C_ID 0xE8
+	#define TEV_RANGE_ADJ_0_ID 0xE9
+	#define TEV_RANGE_ADJ_1_ID 0xEA
+	#define TEV_RANGE_ADJ_2_ID 0xEB
+	#define TEV_RANGE_ADJ_3_ID 0xEC
+	#define TEV_RANGE_ADJ_4_ID 0xED
+	#define TEV_FOG_PARAM_0_ID 0xEE
+	#define TEV_FOG_PARAM_1_ID 0xEF
+	#define TEV_FOG_PARAM_2_ID 0xF0
+	#define TEV_FOG_PARAM_3_ID 0xF1
+	#define TEV_FOG_COLOR_ID 0xF2
+	#define TEV_ALPHAFUNC_ID 0xF3
+	#define TEV_Z_ENV_0_ID 0xF4
+	#define TEV_Z_ENV_1_ID 0xF5
+	#define TEV_KSEL_0_ID 0xF6
+	#define TEV_KSEL_1_ID 0xF7
+	#define TEV_KSEL_2_ID 0xF8
+	#define TEV_KSEL_3_ID 0xF9
+	#define TEV_KSEL_4_ID 0xFA
+	#define TEV_KSEL_5_ID 0xFB
+	#define TEV_KSEL_6_ID 0xFC
+	#define TEV_KSEL_7_ID 0xFD
+
+	// 0xC0..0xDF
+	union TEV_ColorEnv
+	{
+		struct
+		{
+			unsigned seld : 4;
+			unsigned selc : 4;
+			unsigned selb : 4;
+			unsigned sela : 4;
+			unsigned bias : 2;
+			unsigned sub : 1;
+			unsigned clamp : 1;
+			unsigned shift : 2;
+			unsigned dest : 2;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xC1..0xDF
+	union TEV_AlphaEnv
+	{
+		struct
+		{
+			unsigned mode : 2;
+			unsigned swap : 2;
+			unsigned seld : 3;
+			unsigned selc : 3;
+			unsigned selb : 3;
+			unsigned sela : 3;
+			unsigned bias : 2;
+			unsigned sub : 1;
+			unsigned clamp : 1;
+			unsigned shift : 2;
+			unsigned dest : 2;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xE0
+	union TEV_RegisterL
+	{
+		struct
+		{
+			unsigned r : 11;
+			unsigned unused1 : 1;
+			unsigned a : 11;
+			unsigned unused2 : 1;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xE1
+	union TEV_RegisterH
+	{
+		struct
+		{
+			unsigned b : 11;
+			unsigned unused1 : 1;
+			unsigned g : 11;
+			unsigned unused2 : 1;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	union TEV_KonstRegisterL
+	{
+		struct
+		{
+			unsigned r : 8;
+			unsigned unused1 : 4;
+			unsigned a : 8;
+			unsigned unused2 : 4;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	union TEV_KonstRegisterH
+	{
+		struct
+		{
+			unsigned b : 8;
+			unsigned unused1 : 4;
+			unsigned g : 8;
+			unsigned unused2 : 4;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xE8
+	union TEV_RangeAdj_Contol
+	{
+		struct
+		{
+			unsigned center : 10;	// center x
+			unsigned enb : 1;
+			unsigned unused : 13;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xE9...0xED
+	union TEV_RangeAdj
+	{
+		struct
+		{
+			unsigned r0 : 12;
+			unsigned r1 : 12;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xEE
+	union TEV_FogParam0
+	{
+		struct
+		{
+			unsigned a_mant : 11;
+			unsigned a_expn : 8;
+			unsigned a_sign : 1;
+			unsigned unused : 4;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xEF
+	union TEV_FogParam1
+	{
+		struct
+		{
+			unsigned b_mag : 24;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xF0
+	union TEV_FogParam2
+	{
+		struct
+		{
+			unsigned b_shft : 5;
+			unsigned unused : 19;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xF1
+	union TEV_FogParam3
+	{
+		struct
+		{
+			unsigned c_mant : 11;
+			unsigned c_expn : 8;
+			unsigned c_sign : 1;
+			unsigned proj : 1;
+			unsigned fsel : 3;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xF2
+	union TEV_FogColor
+	{
+		struct
+		{
+			unsigned b : 8;
+			unsigned g : 8;
+			unsigned r : 8;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xF3
+	union TEV_AlphaFunc
+	{
+		struct
+		{
+			unsigned a0 : 8;
+			unsigned a1 : 8;
+			unsigned op0 : 3;
+			unsigned op1 : 3;
+			unsigned logic : 2;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xF4
+	union TEV_ZEnv0
+	{
+		struct
+		{
+			unsigned zoff : 24;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xF5
+	union TEV_ZEnv1
+	{
+		struct
+		{
+			unsigned type : 2;
+			unsigned op : 2;
+			unsigned unused : 20;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	// 0xF6..0xFD
+	union TEV_KSel
+	{
+		struct
+		{
+			unsigned xrb : 2;
+			unsigned xga : 2;
+			unsigned kcsel0 : 5;
+			unsigned kasel0 : 5;
+			unsigned kcsel1 : 5;
+			unsigned kasel1 : 5;
+			unsigned rid : 8;
+		};
+		uint32_t bits;
+	};
+
+	struct TEVState
+	{
+		TEV_ColorEnv color_env[16]{};		// 0xC0..0xDF
+		TEV_AlphaEnv alpha_env[16]{};		// 0xC1..0xDF
+		TEV_RegisterL regl[4]{};		// 0xE0,0xE2,0xE4,0xE6
+		TEV_RegisterH regh[4]{};		// 0xE1,0xE3,0xE5,0xE7
+		TEV_KonstRegisterL kregl[4]{};	// Rev B K constants, same register ids as the colour registers
+		TEV_KonstRegisterH kregh[4]{};
+		TEV_RangeAdj_Contol rangeadj_control{};	// 0xE8
+		TEV_RangeAdj range_adj[5]{};	// 0xE9...0xED
+		TEV_FogParam0 fog_param0{};		// 0xEE
+		TEV_FogParam1 fog_param1{};		// 0xEF
+		TEV_FogParam2 fog_param2{};		// 0xF0
+		TEV_FogParam3 fog_param3{};		// 0xF1
+		TEV_FogColor fog_color{};		// 0xF2
+		TEV_AlphaFunc alpha_func{};		// 0xF3
+		TEV_ZEnv0 zenv0{};		// 0xF4
+		TEV_ZEnv1 zenv1{};		// 0xF5
+		TEV_KSel ksel[8]{};		// 0xF6..0xFD
+	};
+
+	class TextureEnvironmentUnit
+	{
+		friend GFXCore;
+		friend Rasterizer;
+		GFXCore* gfx = nullptr;
+
+		TEVState tev{};
+
+		GLProgram* program = nullptr;		//!< Static TEV (fragment) program; created once
+		bool programFlat = false;			//!< Whether that program is the flat-shaded variant
+
+		// -------------------------------------------------------------------------------------
+		// Software pipeline (GFX_PIPELINE = soft, issue #384)
+		//
+		// The software TEV is the combine datapath of gfx-tev.md 3: a stage loop over the colour
+		// register file (3.3), the Z-texture environment (3.5), the fog unit (3.6-3.7) and the
+		// final alpha function (3.8). The arithmetic is carried in the units of the hardware -
+		// colours 0..255, an 11-bit signed register file, an 8-bit blend fraction.
+		// -------------------------------------------------------------------------------------
+
+		//! Decode the colour register file (and the Rev-B K constants) for the software combine.
+		void SoftLoadRegisters(float reg[4][4], float kreg[4][4]) const;
+
+		//! Run one combine stage over the colour register file (gfx-tev.md 3.2).
+		void SoftStage(int stage, const float* texel, const float* raster,
+			float reg[4][4], const float kreg[4][4]) const;
+
+		//! The K constant a `kcsel`/`kasel` selector names (gfx-tev.md 3.4).
+		float SoftKonst(unsigned sel, int component, const float kreg[4][4]) const;
+
+		//! The offset an indirect (bump) stage adds to the coordinate it samples with, in the S17.7
+		//! texel space of the texture unit (gfx-bump.md 3.3-3.8).
+		void SoftBumpOffset(int stage, float coordS, float coordT, float* ds, float* dt) const;
+
+	public:
+		TextureEnvironmentUnit(HWConfig* config, GFXCore* parent_gfx);
+		~TextureEnvironmentUnit();
+
+		void loadTEVReg(size_t index, uint32_t value);
+
+		//! The TEV register state (read-only; used by the debugger and the unit tests).
+		const TEVState& State() const { return tev; }
+
+		//! Bind (creating on first use) the TEV fragment program.
+		GLProgram* GetTevProgram();
+
+		//! The TEV fragment program when it has already been created (the debugger must not create GL
+		//! objects just to report the state).
+		GLProgram* GetTevProgramNoCreate() const { return program; }
+
+		//! The source text of the TEV fragment shader (the debugger can write it to a file).
+		static const char* FragmentShaderSource();
+
+		//! The source text of one colour-interpolation variant of the fragment shader (see
+		//! TransformUnit::VertexShaderSource(bool)).
+		static std::string FragmentShaderSource(bool flat);
+
+		//! Upload the whole TEV register state to the program.
+		void UploadUniforms(GLProgram& program);
+
+		//! Shade one rasterized sample with the software TEV: the combine stages, the fog and the
+		//! alpha function (gfx-tev.md 3.2, 3.6, 3.8). `rgba` comes back in 0..255 units and
+		//! `depth` may have been replaced by the Z-texture environment (gfx-tev.md 3.5).
+		//! Returns false when the alpha function killed the fragment.
+		bool SoftShade(const SoftFragment& fragment, float rgba[4], float* depth);
+
+		//! Put the TEV register state back into the reset state.
+		void Reset();
+
+		void DisposePrograms();
+	};
+}

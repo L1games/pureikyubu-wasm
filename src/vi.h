@@ -1,0 +1,168 @@
+#pragma once
+
+// VI registers (can be accessed from any offset and by any size, 2 or 4 bytes)
+
+#define VI_VERT_TIMING          0x00	// Vertical Timing Register
+#define VI_DISP_CR              0x02	// Display Configuration Register
+#define VI_HORZ_TIMING0         0x04	// Horizontal Timing 0 Register
+#define VI_HORZ_TIMING1         0x08	// Horizontal Timing 1 Register
+#define VI_VERT_TIMING_ODD      0x0C	// Odd Field Vertical Timing Register
+#define VI_VERT_TIMING_EVEN     0x10	// Even Field Vertical Timing Register
+#define VI_BBINT_ODD            0x14	// Odd Field Burst Blanking Interval Register
+#define VI_BBINT_EVEN           0x18	// Even Field Burst Blanking Interval Register
+#define VI_TFBL                 0x1C	// Top Field Base Register L
+#define VI_TFBR                 0x20	// Top Field Base Register R
+#define VI_BFBL                 0x24	// Bottom Field Base Register L
+#define VI_BFBR                 0x28	// Bottom Field Base Register R
+#define VI_DISP_POS             0x2C	// Display Position Register   (Read Only ⚠️)
+#define VI_INT0                 0x30	// Display Interrupt Register 0
+#define VI_INT1                 0x34	// Display Interrupt Register 1
+#define VI_INT2                 0x38	// Display Interrupt Register 2
+#define VI_INT3                 0x3C	// Display Interrupt Register 3
+#define VI_DISP_LATCH0			0x40	// Display Latch Register 0
+#define VI_DISP_LATCH1			0x44	// Display Latch Register 1
+#define VI_PICT_CR				0x48	// Picture Configuration Register
+#define VI_HORZ_SCALE			0x4A	// Horizontal Scale Register
+#define VI_TAP0                 0x4C	// Filter Coefficient Table 0
+#define VI_TAP1                 0x50	// Filter Coefficient Table 1
+#define VI_TAP2                 0x54	// Filter Coefficient Table 2
+#define VI_TAP3                 0x58	// Filter Coefficient Table 3
+#define VI_TAP4                 0x5C	// Filter Coefficient Table 4
+#define VI_TAP5                 0x60	// Filter Coefficient Table 5
+#define VI_TAP6                 0x64	// Filter Coefficient Table 6
+#define VI_RESERVED_68			0x68	// Reserved
+#define VI_OUT_POL				0x6A	// Output Polarity Register
+#define VI_CLK_SEL              0x6C	// VI Clock Select Register
+#define VI_DTV                  0x6E	// VI DTV Status Register  (Read Only ⚠️)
+#define VI_SCALE_WIDTH			0x70	// Scaling Width Register
+#define VI_BRDR_HBE             0x72	// Border HBE
+#define VI_BRDR_HBS             0x74	// Border HBS
+#define VI_REG_MAX				0x76
+
+// Display Configuration Register mask (for 16-bit register)
+#define VI_CR_ENB       0x0001          // enable the video timing generation
+#define VI_CR_RST       0x0002          // puts VI into its idle state
+#define VI_CR_NIN       0x0004          // 0: interlace, 1: non-interlace
+#define VI_CR_DLR       0x0008          // this bit selects the 3D display mode
+#define VI_CR_LE0(r)    ((r>>4)&3)      // gun trigger mode
+#define VI_CR_LE1(r)    ((r>>6)&3)      // to enable Display Latch Register 1
+#define VI_CR_FMT(r)    ((r>>8)&3)      // indicates current video format
+
+// Display Position Register mask (for 32-bit register)
+#define VI_POS_VCT(r)   ((r>>16)&0x7ff) // vertical count (1...vcount in emu)
+#define VI_POS_HCT(r)   (r & 0x7ff)     // horizontal count (always 1 in emu)
+
+// Display Interrupt Register mask (for 32-bit register)
+#define VI_INT_INT      0x80000000      // interrupt status. "1" indicates that an interrupt is active
+#define VI_INT_ENB      0x10000000      // interrupt is enabled if this bit is set
+#define VI_INT_VCT(r)   ((r>>16)&0x7ff) // vertical count to generate interrupt
+#define VI_INT_HCT(r)   (r & 0x7ff)     // horizontal count to generate interrupt (ignored in emu)
+
+// video modes
+#define VI_NTSC_LIKE        0
+#define VI_PAL_LIKE         1
+
+// VI_DTV_REG (VI_DTV_STATUS) pins. The register reports the state of the hardware
+// pins that strap the video encoder; software (the SDK's VIGetTvFormat) reads the
+// PAL/NTSC bit to decide which of its render modes it is allowed to configure.
+#define VI_DTV_PAL          0x0002      // 1: PAL encoder, 0: NTSC encoder
+
+// max vertical line count
+#define VI_NTSC_INTER       525         // 60 Hz
+#define VI_NTSC_NON_INTER   263         // 30 Hz
+#define VI_PAL_INTER        625         // 50 Hz
+#define VI_PAL_NON_INTER    313         // 25 Hz
+
+// ---------------------------------------------------------------------------
+// hardware API
+
+namespace Flipper
+{
+	union VIPosition
+	{
+		struct {
+			unsigned hcount : 11;			// horizontal count
+			unsigned padding1 : 5;
+			unsigned vcount : 11;			// vertical count
+			unsigned padding2 : 1;
+			unsigned enabled : 1;			// 1: interrupt enabled
+			unsigned padding3 : 2;
+			unsigned status : 1;			// 1: interrupt status / gun trigger flag
+		};
+		uint32_t val;
+	};
+
+	// VI state (registers and other data)
+	struct VIState
+	{
+		volatile uint16_t    disp_cr;    // display configuration register
+		volatile uint16_t    vert_timing; // vertical timing register: the active line count is
+										  // `ACV` (bits 13:4), see ActiveLines()
+		volatile uint32_t    tfbl;       // video buffer (top field)
+		volatile uint32_t    bfbl;       // video buffer (bottom field)
+		volatile VIPosition  pos;        // beam position
+		volatile VIPosition  int0;       // INT0 status
+		volatile VIPosition	 latch0;
+		volatile VIPosition	 latch1;
+
+		volatile uint32_t    mode;       // see VI modes
+		bool        inter;      // 1, if interlace
+		uint32_t	vcount;		// number of lines for single frame
+		int64_t     vtime;      // frame timer
+		int64_t     one_frame;  // frame length in CPU timer ticks
+
+		bool        xfb;        // enable video frame buffer (GDI)
+		uint8_t* xfbbuf;     // translated TFBL pointer
+		RGB* gfxbuf;     // DIB
+
+		bool        log;        // do debugger log output
+		size_t      frames;     // frames rendered by VI
+
+		int64_t     one_second;     // one CPU second in timer ticks
+
+		int         videoEncoderFuse;
+	};
+
+	// The XFB the video interface scans: 640 pixels wide (1280 bytes per line of packed YUV 4:2:2)
+	// and 480 lines high, which is the picture the emulator's window shows.
+	#define VI_XFB_WIDTH 640
+	#define VI_XFB_HEIGHT 480
+
+	class VideoInterface
+	{
+		VIState vi{};		//!< VI state (registers and other data)
+
+		//! The number of XFB lines the VI scans out (the active picture of `VI_VERT_TIMING`).
+		uint32_t ActiveLines() const;
+
+		void YUVBlit(uint8_t* yuvbuf, RGB* dib);
+		void vi_set_timing();
+		static void VIRegRead(uint32_t addr, uint32_t* reg, void* context);
+		static void VIRegWrite(uint32_t addr, uint32_t data, void* context);
+
+	public:
+		VideoInterface(Flipper* flipper, HWConfig* config);
+		~VideoInterface();
+
+		void VIUpdate();
+
+		/// <summary>
+		/// The current video line number of the raster (VI_DISPLAY_POS.VCT). The serial interface
+		/// derives its poll schedule from it: SIPOLL[X] is an interval in video lines and a new
+		/// frame is a wrap of the counter (serial-interface.md 5.1).
+		/// </summary>
+		uint32_t GetCurrentLine() const { return vi.pos.vcount; }
+		void VIStats();
+
+		void VISetEncoderFuse(int value);
+
+		/// <summary>
+		/// Simulate a light gun trigger pull (using external Flipper signals GUNTRG0 and GUNTRG1, which are routed to the VI).
+		/// In this case, the current position is fixed in the Latch registers (0 or 1, depending on the signal).
+		/// </summary>
+		/// <param name="num">GUNTRG signal, 0 or 1</param>
+		void VIGunTrigger(int num);
+
+		void VIDisableXfb();
+	};
+}

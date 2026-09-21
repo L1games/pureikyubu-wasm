@@ -1,0 +1,220 @@
+// Flipper main memory (1T-SRAM) controller
+
+#pragma once
+
+// MEM PI Mapped regs
+
+// Mem ranges (addr >> 10)
+#define MEM_MARR0_START 0x00
+#define MEM_MARR0_END 0x02
+#define MEM_MARR1_START 0x04
+#define MEM_MARR1_END 0x06
+#define MEM_MARR2_START 0x08
+#define MEM_MARR2_END 0x0a
+#define MEM_MARR3_START 0x0c
+#define MEM_MARR3_END 0x0e
+#define MEM_MARR_CONTROL 0x10
+#define MEM_CP_DIAL 0x12
+#define MEM_TC_DIAL 0x14
+#define MEM_PE_DIAL 0x16
+#define MEM_PI_READ_DIAL 0x18
+#define MEM_PI_WRITE_DIAL 0x1a
+#define MEM_INT_ENABLE 0x1c				// MI interrupt enable
+#define MEM_INT_STATUS 0x1e				// MI interrupt status
+#define MEM_INT_CLR 0x20				// Clear pending MI interrupt
+#define MEM_INT_ADDRL 0x22				// Interrupted Mem address
+#define MEM_INT_ADDRH 0x24
+#define MEM_REFRESH 0x26				// Cycles between refresh
+#define MEM_CONFIG 0x28
+#define MEM_LATENCY 0x2a				// Mem latency cycles (3-6)
+#define MEM_RDTORD 0x2c					// Idle cycles
+#define MEM_RDTOWR 0x2e
+#define MEM_WRTORD 0x30
+#define MEM_CP_COUNTERH 0x32
+#define MEM_CP_COUNTERL 0x34
+#define MEM_TC_COUNTERH 0x36
+#define MEM_TC_COUNTERL 0x38
+#define MEM_PI_READ_COUNTERH 0x3a
+#define MEM_PI_READ_COUNTERL 0x3c
+#define MEM_PI_WRITE_COUNTERH 0x3e
+#define MEM_PI_WRITE_COUNTERL 0x40
+#define MEM_DSP_COUNTERH 0x42
+#define MEM_DSP_COUNTERL 0x44
+#define MEM_IO_COUNTERH 0x46
+#define MEM_IO_COUNTERL 0x48
+#define MEM_VI_COUNTERH 0x4a
+#define MEM_VI_COUNTERL 0x4c
+#define MEM_PE_COUNTERH 0x4e
+#define MEM_PE_COUNTERL 0x50
+#define MEM_RF_COUNTERH 0x52			// Refresh requests
+#define MEM_RF_COUNTERL 0x54
+#define MEM_FI_COUNTERH 0x56			// Forced idle cycles
+#define MEM_FI_COUNTERL 0x58
+#define MEM_DRV_STRENGTH 0x5a
+#define MEM_REFRESH_THRES 0x5c
+#define MEM_REG_MAX 0x5e
+
+#define MEM_MARR_SHIFT 10
+#define MEM_MARR_MASK 0x03fffc00		//!< Valid bits for a MARR address
+
+namespace Flipper
+{
+	union MEMMarrControl
+	{
+		struct
+		{
+			unsigned marr0_read_enable : 1;
+			unsigned marr0_write_enable : 1;
+			unsigned marr1_read_enable : 1;
+			unsigned marr1_write_enable : 1;
+			unsigned marr2_read_enable : 1;
+			unsigned marr2_write_enable : 1;
+			unsigned marr3_read_enable : 1;
+			unsigned marr3_write_enable : 1;
+		};
+		uint32_t bits;
+	};
+
+	union MEMIntReg
+	{
+		struct
+		{
+			unsigned marr0 : 1;
+			unsigned marr1 : 1;
+			unsigned marr2 : 1;
+			unsigned marr3 : 1;
+			unsigned addr_err : 1;
+		};
+		uint32_t bits;
+	};
+
+#pragma pack(push, 1)
+	union MEMCounter
+	{
+		struct
+		{
+			uint16_t lo;
+			uint16_t hi;
+		};
+		uint32_t cnt;
+	};
+#pragma pack(pop)
+
+	struct MIState
+	{
+		uint8_t* ram;
+		size_t ramSize;
+		bool log;
+
+		uint32_t marr_start[4];
+		uint32_t marr_end[4];
+		MEMMarrControl marr_control;
+		MEMIntReg int_enable;
+		MEMIntReg int_status;
+
+		MEMCounter cp_counter;
+		MEMCounter tc_counter;
+		MEMCounter pi_read_counter;
+		MEMCounter pi_write_counter;
+		MEMCounter dsp_counter;
+		MEMCounter io_counter;
+		MEMCounter vi_counter;
+		MEMCounter pe_counter;
+	};
+
+	class MemoryInterface
+	{
+		MIState mi{};
+
+		static void mi_no_write(uint32_t addr, uint32_t data, void* ctx);
+		static void mi_no_read(uint32_t addr, uint32_t* reg, void* ctx);
+		static void MEM_WriteMarrStart(uint32_t addr, uint32_t data, void* ctx);
+		static void MEM_ReadMarrStart(uint32_t addr, uint32_t* reg, void* ctx);
+		static void MEM_WriteMarrEnd(uint32_t addr, uint32_t data, void* ctx);
+		static void MEM_ReadMarrEnd(uint32_t addr, uint32_t* reg, void* ctx);
+		static void MEM_WriteMarrControl(uint32_t addr, uint32_t data, void* ctx);
+		static void MEM_ReadMarrControl(uint32_t addr, uint32_t* reg, void* ctx);
+		static void MEM_WriteIntEnable(uint32_t addr, uint32_t data, void* ctx);
+		static void MEM_ReadIntEnable(uint32_t addr, uint32_t* reg, void* ctx);
+		static void MEM_ReadIntStatus(uint32_t addr, uint32_t* reg, void* ctx);
+		static void MEM_WriteIntClear(uint32_t addr, uint32_t data, void* ctx);
+		static void MEM_WriteCounter(uint32_t addr, uint32_t data, void* ctx);
+		static void MEM_ReadCounter(uint32_t addr, uint32_t* reg, void* ctx);
+
+	public:
+		MemoryInterface(Flipper* flipper, HWConfig* config);
+		~MemoryInterface();
+
+		// These calls are specifically added to show the direct connection of the MEM block, with the rest of the Flipper modules (according to the architecture).
+
+		/// <summary>
+		/// used by PI to read the cache line.
+		/// </summary>
+		void MIReadBurst(uint32_t mem_addr, uint8_t burstData[32]);
+
+		/// <summary>
+		/// used by PI to write data using GFX FIFO or for Cache Store (cache line write).
+		/// </summary>
+		void MIWriteBurst(uint32_t mem_addr, uint8_t burstData[32]);
+
+		/// <summary>
+		/// Get a pointer to memory for Single-beat transactions from the PI side (8, 16, 32, 64 bits in size).
+		/// </summary>
+		void* MIGetMemoryPointerForPI(uint32_t phys_addr);
+
+		/// <summary>
+		/// Used for memory access from the CP side, for Vertex Array.
+		/// </summary>
+		void* MIGetMemoryPointerForCP(uint32_t phys_addr);
+
+		/// <summary>
+		/// The texture unit accesses MEM to sample textures in TMEM.
+		/// </summary>
+		void* MIGetMemoryPointerForTX(uint32_t phys_addr);
+
+		/// <summary>
+		/// VI uses MEM to gain access to the XFB.
+		/// </summary>
+		void* MIGetMemoryPointerForVI(uint32_t phys_addr);
+
+		/// <summary>
+		/// Get a pointer to memory for DSP DMA purposes.
+		/// </summary>
+		void* MIGetMemoryPointerForDSP(uint32_t phys_addr);
+
+		/// <summary>
+		/// Used by various IO devices (AI, EXI, SI, DI) for DMA.
+		/// </summary>
+		void* MIGetMemoryPointerForIO(uint32_t phys_addr);
+
+		/// <summary>
+		/// Get a pointer to a location in Splash memory for debugging purposes.
+		/// </summary>
+		void* MIGetMemoryPointerForDebug(uint32_t phys_addr);
+
+		/// <summary>
+		/// The size of the allocated main memory, so that a caller which has to validate a
+		/// transfer window of its own (EXI, AI, DSP, the executable loaders) can ask for it
+		/// instead of assuming the 24 MB of the standard configuration.
+		/// </summary>
+		size_t MIGetMemorySize();
+
+		/// <summary>
+		/// A whole DMA window inside main memory: the accessors above validate the start address
+		/// only, which is not enough for a transfer of an attacker-chosen length, so every block
+		/// that copies into (or out of) main memory uses this one instead. Returns nullptr when
+		/// any byte of [phys_addr, phys_addr + size) is outside the RAM that was allocated.
+		/// </summary>
+		void* MIGetMemoryPointerForIO(uint32_t phys_addr, size_t size);
+		void* MIGetMemoryPointerForDSP(uint32_t phys_addr, size_t size);
+		void* MIGetMemoryPointerForPI(uint32_t phys_addr, size_t size);
+		void* MIGetMemoryPointerForDebug(uint32_t phys_addr, size_t size);
+
+		/// <summary>
+		/// The PI requested a MEM subsystem reset by clearing the PI_CONFIG_MEMRSTB bit (active low). Do something similar to a MEM reset.
+		/// It's not yet clear exactly what happens when the MEM is reset, but it's clear that various FIFOs and the state machines in the MEM itself are cleared,
+		/// and RST is also forwarded to the 1T-SRAM chips to reset the rich internal world of Splash.
+		/// </summary>
+		void MemRst();
+	};
+}

@@ -1,0 +1,1557 @@
+
+---
+events:
+  -
+    kind: "message-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineSystem.cmake:207 (message)"
+      - "CMakeLists.txt:2 (project)"
+    message: |
+      The target system is: Emscripten - 1 - x86
+      The host system is: Windows - 10.0.19044 - AMD64
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeNinjaFindMake.cmake:5 (find_program)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_MAKE_PROGRAM"
+    description: "Program used to build from build.ninja files."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ninja-build"
+      - "ninja"
+      - "samu"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/ninja-build.com"
+      - "C:/Users/IK/Desktop/emsdk/ninja-build.exe"
+      - "C:/Users/IK/Desktop/emsdk/ninja-build"
+      - "C:/Users/IK/Desktop/emsdk/ninja.com"
+    found: "C:/Users/IK/Desktop/emsdk/ninja.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_STRIP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-strip"
+      - "strip"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-strip.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-strip.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-strip"
+      - "C:/Users/IK/Desktop/emsdk/llvm-strip.com"
+      - "C:/Users/IK/Desktop/emsdk/llvm-strip.exe"
+      - "C:/Users/IK/Desktop/emsdk/llvm-strip"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-strip.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-strip.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-strip"
+      - "C:/ant/bin/llvm-strip.com"
+      - "C:/ant/bin/llvm-strip.exe"
+      - "C:/ant/bin/llvm-strip"
+      - "C:/Program Files/nodejs/llvm-strip.com"
+      - "C:/Program Files/nodejs/llvm-strip.exe"
+      - "C:/Program Files/nodejs/llvm-strip"
+      - "C:/Users/IK/.cargo/bin/llvm-strip.com"
+      - "C:/Users/IK/.cargo/bin/llvm-strip.exe"
+      - "C:/Users/IK/.cargo/bin/llvm-strip"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-strip.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-strip.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-strip"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-strip.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-strip.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-strip"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-strip.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-strip.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-strip"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-strip.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-strip.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-strip"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-strip.com"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-strip.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-strip"
+      - "C:/Program Files/CMake/bin/llvm-strip.com"
+      - "C:/Program Files/CMake/bin/llvm-strip.exe"
+      - "C:/Program Files/CMake/bin/llvm-strip"
+      - "/bin/llvm-strip.com"
+      - "/bin/llvm-strip.exe"
+      - "/bin/llvm-strip"
+      - "/sbin/llvm-strip.com"
+      - "/sbin/llvm-strip.exe"
+      - "/sbin/llvm-strip"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/strip.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/strip.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/strip"
+      - "C:/Users/IK/Desktop/emsdk/strip.com"
+      - "C:/Users/IK/Desktop/emsdk/strip.exe"
+      - "C:/Users/IK/Desktop/emsdk/strip"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/strip.com"
+    found: "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/strip.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_LINKER"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "ld.lld"
+      - "ld"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/ld.lld.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/ld.lld.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/ld.lld"
+      - "C:/Users/IK/Desktop/emsdk/ld.lld.com"
+      - "C:/Users/IK/Desktop/emsdk/ld.lld.exe"
+      - "C:/Users/IK/Desktop/emsdk/ld.lld"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/ld.lld.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/ld.lld.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/ld.lld"
+      - "C:/ant/bin/ld.lld.com"
+      - "C:/ant/bin/ld.lld.exe"
+      - "C:/ant/bin/ld.lld"
+      - "C:/Program Files/nodejs/ld.lld.com"
+      - "C:/Program Files/nodejs/ld.lld.exe"
+      - "C:/Program Files/nodejs/ld.lld"
+      - "C:/Users/IK/.cargo/bin/ld.lld.com"
+      - "C:/Users/IK/.cargo/bin/ld.lld.exe"
+      - "C:/Users/IK/.cargo/bin/ld.lld"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/ld.lld.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/ld.lld.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/ld.lld"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/ld.lld.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/ld.lld.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/ld.lld"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/ld.lld.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/ld.lld.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/ld.lld"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/ld.lld.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/ld.lld.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/ld.lld"
+      - "C:/Users/IK/AppData/Roaming/npm/ld.lld.com"
+      - "C:/Users/IK/AppData/Roaming/npm/ld.lld.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/ld.lld"
+      - "C:/Program Files/CMake/bin/ld.lld.com"
+      - "C:/Program Files/CMake/bin/ld.lld.exe"
+      - "C:/Program Files/CMake/bin/ld.lld"
+      - "/bin/ld.lld.com"
+      - "/bin/ld.lld.exe"
+      - "/bin/ld.lld"
+      - "/sbin/ld.lld.com"
+      - "/sbin/ld.lld.exe"
+      - "/sbin/ld.lld"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/ld.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/ld.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/ld"
+      - "C:/Users/IK/Desktop/emsdk/ld.com"
+      - "C:/Users/IK/Desktop/emsdk/ld.exe"
+      - "C:/Users/IK/Desktop/emsdk/ld"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/ld.com"
+    found: "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/ld.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJDUMP"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-objdump"
+      - "objdump"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-objdump.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-objdump.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-objdump"
+      - "C:/Users/IK/Desktop/emsdk/llvm-objdump.com"
+      - "C:/Users/IK/Desktop/emsdk/llvm-objdump.exe"
+      - "C:/Users/IK/Desktop/emsdk/llvm-objdump"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-objdump.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-objdump.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-objdump"
+      - "C:/ant/bin/llvm-objdump.com"
+      - "C:/ant/bin/llvm-objdump.exe"
+      - "C:/ant/bin/llvm-objdump"
+      - "C:/Program Files/nodejs/llvm-objdump.com"
+      - "C:/Program Files/nodejs/llvm-objdump.exe"
+      - "C:/Program Files/nodejs/llvm-objdump"
+      - "C:/Users/IK/.cargo/bin/llvm-objdump.com"
+      - "C:/Users/IK/.cargo/bin/llvm-objdump.exe"
+      - "C:/Users/IK/.cargo/bin/llvm-objdump"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-objdump.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-objdump.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-objdump"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-objdump.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-objdump.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-objdump"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-objdump.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-objdump.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-objdump"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-objdump.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-objdump.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-objdump"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-objdump.com"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-objdump.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-objdump"
+      - "C:/Program Files/CMake/bin/llvm-objdump.com"
+      - "C:/Program Files/CMake/bin/llvm-objdump.exe"
+      - "C:/Program Files/CMake/bin/llvm-objdump"
+      - "/bin/llvm-objdump.com"
+      - "/bin/llvm-objdump.exe"
+      - "/bin/llvm-objdump"
+      - "/sbin/llvm-objdump.com"
+      - "/sbin/llvm-objdump.exe"
+      - "/sbin/llvm-objdump"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/objdump.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/objdump.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/objdump"
+      - "C:/Users/IK/Desktop/emsdk/objdump.com"
+      - "C:/Users/IK/Desktop/emsdk/objdump.exe"
+      - "C:/Users/IK/Desktop/emsdk/objdump"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/objdump.com"
+    found: "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/objdump.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_OBJCOPY"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-objcopy"
+      - "objcopy"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-objcopy.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-objcopy.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-objcopy"
+      - "C:/Users/IK/Desktop/emsdk/llvm-objcopy.com"
+      - "C:/Users/IK/Desktop/emsdk/llvm-objcopy.exe"
+      - "C:/Users/IK/Desktop/emsdk/llvm-objcopy"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-objcopy.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-objcopy.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-objcopy"
+      - "C:/ant/bin/llvm-objcopy.com"
+      - "C:/ant/bin/llvm-objcopy.exe"
+      - "C:/ant/bin/llvm-objcopy"
+      - "C:/Program Files/nodejs/llvm-objcopy.com"
+      - "C:/Program Files/nodejs/llvm-objcopy.exe"
+      - "C:/Program Files/nodejs/llvm-objcopy"
+      - "C:/Users/IK/.cargo/bin/llvm-objcopy.com"
+      - "C:/Users/IK/.cargo/bin/llvm-objcopy.exe"
+      - "C:/Users/IK/.cargo/bin/llvm-objcopy"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-objcopy.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-objcopy.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-objcopy"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-objcopy.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-objcopy.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-objcopy"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-objcopy.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-objcopy.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-objcopy"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-objcopy.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-objcopy.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-objcopy"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-objcopy.com"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-objcopy.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-objcopy"
+      - "C:/Program Files/CMake/bin/llvm-objcopy.com"
+      - "C:/Program Files/CMake/bin/llvm-objcopy.exe"
+      - "C:/Program Files/CMake/bin/llvm-objcopy"
+      - "/bin/llvm-objcopy.com"
+      - "/bin/llvm-objcopy.exe"
+      - "/bin/llvm-objcopy"
+      - "/sbin/llvm-objcopy.com"
+      - "/sbin/llvm-objcopy.exe"
+      - "/sbin/llvm-objcopy"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/objcopy.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/objcopy.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/objcopy"
+      - "C:/Users/IK/Desktop/emsdk/objcopy.com"
+      - "C:/Users/IK/Desktop/emsdk/objcopy.exe"
+      - "C:/Users/IK/Desktop/emsdk/objcopy"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/objcopy.com"
+    found: "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/objcopy.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_READELF"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-readelf"
+      - "readelf"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-readelf.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-readelf.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-readelf"
+      - "C:/Users/IK/Desktop/emsdk/llvm-readelf.com"
+      - "C:/Users/IK/Desktop/emsdk/llvm-readelf.exe"
+      - "C:/Users/IK/Desktop/emsdk/llvm-readelf"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-readelf.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-readelf.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-readelf"
+      - "C:/ant/bin/llvm-readelf.com"
+      - "C:/ant/bin/llvm-readelf.exe"
+      - "C:/ant/bin/llvm-readelf"
+      - "C:/Program Files/nodejs/llvm-readelf.com"
+      - "C:/Program Files/nodejs/llvm-readelf.exe"
+      - "C:/Program Files/nodejs/llvm-readelf"
+      - "C:/Users/IK/.cargo/bin/llvm-readelf.com"
+      - "C:/Users/IK/.cargo/bin/llvm-readelf.exe"
+      - "C:/Users/IK/.cargo/bin/llvm-readelf"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-readelf.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-readelf.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-readelf"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-readelf.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-readelf.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-readelf"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-readelf.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-readelf.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-readelf"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-readelf.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-readelf.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-readelf"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-readelf.com"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-readelf.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-readelf"
+      - "C:/Program Files/CMake/bin/llvm-readelf.com"
+      - "C:/Program Files/CMake/bin/llvm-readelf.exe"
+      - "C:/Program Files/CMake/bin/llvm-readelf"
+      - "/bin/llvm-readelf.com"
+      - "/bin/llvm-readelf.exe"
+      - "/bin/llvm-readelf"
+      - "/sbin/llvm-readelf.com"
+      - "/sbin/llvm-readelf.exe"
+      - "/sbin/llvm-readelf"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/readelf.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/readelf.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/readelf"
+      - "C:/Users/IK/Desktop/emsdk/readelf.com"
+      - "C:/Users/IK/Desktop/emsdk/readelf.exe"
+      - "C:/Users/IK/Desktop/emsdk/readelf"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/readelf.com"
+    found: "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/readelf.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_DLLTOOL"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-dlltool"
+      - "dlltool"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-dlltool.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-dlltool.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-dlltool"
+      - "C:/Users/IK/Desktop/emsdk/llvm-dlltool.com"
+      - "C:/Users/IK/Desktop/emsdk/llvm-dlltool.exe"
+      - "C:/Users/IK/Desktop/emsdk/llvm-dlltool"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-dlltool.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-dlltool.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-dlltool"
+      - "C:/ant/bin/llvm-dlltool.com"
+      - "C:/ant/bin/llvm-dlltool.exe"
+      - "C:/ant/bin/llvm-dlltool"
+      - "C:/Program Files/nodejs/llvm-dlltool.com"
+      - "C:/Program Files/nodejs/llvm-dlltool.exe"
+      - "C:/Program Files/nodejs/llvm-dlltool"
+      - "C:/Users/IK/.cargo/bin/llvm-dlltool.com"
+      - "C:/Users/IK/.cargo/bin/llvm-dlltool.exe"
+      - "C:/Users/IK/.cargo/bin/llvm-dlltool"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-dlltool.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-dlltool.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-dlltool"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-dlltool.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-dlltool.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-dlltool"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-dlltool.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-dlltool.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-dlltool"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-dlltool.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-dlltool.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-dlltool"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-dlltool.com"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-dlltool.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-dlltool"
+      - "C:/Program Files/CMake/bin/llvm-dlltool.com"
+      - "C:/Program Files/CMake/bin/llvm-dlltool.exe"
+      - "C:/Program Files/CMake/bin/llvm-dlltool"
+      - "/bin/llvm-dlltool.com"
+      - "/bin/llvm-dlltool.exe"
+      - "/bin/llvm-dlltool"
+      - "/sbin/llvm-dlltool.com"
+      - "/sbin/llvm-dlltool.exe"
+      - "/sbin/llvm-dlltool"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/dlltool.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/dlltool.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/dlltool"
+      - "C:/Users/IK/Desktop/emsdk/dlltool.com"
+      - "C:/Users/IK/Desktop/emsdk/dlltool.exe"
+      - "C:/Users/IK/Desktop/emsdk/dlltool"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/dlltool.com"
+    found: "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/dlltool.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_ADDR2LINE"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "llvm-addr2line"
+      - "addr2line"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-addr2line.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-addr2line.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/llvm-addr2line"
+      - "C:/Users/IK/Desktop/emsdk/llvm-addr2line.com"
+      - "C:/Users/IK/Desktop/emsdk/llvm-addr2line.exe"
+      - "C:/Users/IK/Desktop/emsdk/llvm-addr2line"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-addr2line.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-addr2line.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/llvm-addr2line"
+      - "C:/ant/bin/llvm-addr2line.com"
+      - "C:/ant/bin/llvm-addr2line.exe"
+      - "C:/ant/bin/llvm-addr2line"
+      - "C:/Program Files/nodejs/llvm-addr2line.com"
+      - "C:/Program Files/nodejs/llvm-addr2line.exe"
+      - "C:/Program Files/nodejs/llvm-addr2line"
+      - "C:/Users/IK/.cargo/bin/llvm-addr2line.com"
+      - "C:/Users/IK/.cargo/bin/llvm-addr2line.exe"
+      - "C:/Users/IK/.cargo/bin/llvm-addr2line"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-addr2line.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-addr2line.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/llvm-addr2line"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-addr2line.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-addr2line.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/llvm-addr2line"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-addr2line.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-addr2line.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/llvm-addr2line"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-addr2line.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-addr2line.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/llvm-addr2line"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-addr2line.com"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-addr2line.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/llvm-addr2line"
+      - "C:/Program Files/CMake/bin/llvm-addr2line.com"
+      - "C:/Program Files/CMake/bin/llvm-addr2line.exe"
+      - "C:/Program Files/CMake/bin/llvm-addr2line"
+      - "/bin/llvm-addr2line.com"
+      - "/bin/llvm-addr2line.exe"
+      - "/bin/llvm-addr2line"
+      - "/sbin/llvm-addr2line.com"
+      - "/sbin/llvm-addr2line.exe"
+      - "/sbin/llvm-addr2line"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/addr2line.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/addr2line.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/addr2line"
+      - "C:/Users/IK/Desktop/emsdk/addr2line.com"
+      - "C:/Users/IK/Desktop/emsdk/addr2line.exe"
+      - "C:/Users/IK/Desktop/emsdk/addr2line"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/addr2line.com"
+    found: "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/addr2line.exe"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeFindBinUtils.cmake:243 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineCCompiler.cmake:200 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_TAPI"
+    description: "Path to a program."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "tapi"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/tapi.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/tapi.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/tapi"
+      - "C:/Users/IK/Desktop/emsdk/tapi.com"
+      - "C:/Users/IK/Desktop/emsdk/tapi.exe"
+      - "C:/Users/IK/Desktop/emsdk/tapi"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/tapi.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/tapi.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/tapi"
+      - "C:/ant/bin/tapi.com"
+      - "C:/ant/bin/tapi.exe"
+      - "C:/ant/bin/tapi"
+      - "C:/Program Files/nodejs/tapi.com"
+      - "C:/Program Files/nodejs/tapi.exe"
+      - "C:/Program Files/nodejs/tapi"
+      - "C:/Users/IK/.cargo/bin/tapi.com"
+      - "C:/Users/IK/.cargo/bin/tapi.exe"
+      - "C:/Users/IK/.cargo/bin/tapi"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/tapi.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/tapi.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/tapi"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/tapi.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/tapi.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/tapi"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/tapi.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/tapi.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/tapi"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/tapi.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/tapi.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/tapi"
+      - "C:/Users/IK/AppData/Roaming/npm/tapi.com"
+      - "C:/Users/IK/AppData/Roaming/npm/tapi.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/tapi"
+      - "C:/Program Files/CMake/bin/tapi.com"
+      - "C:/Program Files/CMake/bin/tapi.exe"
+      - "C:/Program Files/CMake/bin/tapi"
+      - "/bin/tapi.com"
+      - "/bin/tapi.exe"
+      - "/bin/tapi"
+      - "/sbin/tapi.com"
+      - "/sbin/tapi.exe"
+      - "/sbin/tapi"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Compiler/Clang-FindBinUtils.cmake:50 (find_program)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeDetermineCCompiler.cmake:201 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "program"
+    variable: "CMAKE_C_COMPILER_CLANG_SCAN_DEPS"
+    description: "`clang-scan-deps` dependency scanner"
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: false
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: false
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "clang-scan-deps-23.0"
+      - "clang-scan-deps-23"
+      - "clang-scan-deps23"
+      - "clang-scan-deps"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/"
+      - "C:/Users/IK/Desktop/emsdk/"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/"
+      - "C:/ant/bin/"
+      - "C:/Program Files/nodejs/"
+      - "C:/Users/IK/.cargo/bin/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/"
+      - "C:/Users/IK/AppData/Roaming/npm/"
+      - "C:/Program Files/CMake/bin/"
+      - "/bin/"
+      - "/sbin/"
+    searched_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps-23.0.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps-23.0.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps-23.0"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps-23.0.com"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps-23.0.exe"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps-23.0"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps-23.0.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps-23.0.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps-23.0"
+      - "C:/ant/bin/clang-scan-deps-23.0.com"
+      - "C:/ant/bin/clang-scan-deps-23.0.exe"
+      - "C:/ant/bin/clang-scan-deps-23.0"
+      - "C:/Program Files/nodejs/clang-scan-deps-23.0.com"
+      - "C:/Program Files/nodejs/clang-scan-deps-23.0.exe"
+      - "C:/Program Files/nodejs/clang-scan-deps-23.0"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps-23.0.com"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps-23.0.exe"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps-23.0"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps-23.0.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps-23.0.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps-23.0"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps-23.0.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps-23.0.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps-23.0"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps-23.0.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps-23.0.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps-23.0"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps-23.0.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps-23.0.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps-23.0"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps-23.0.com"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps-23.0.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps-23.0"
+      - "C:/Program Files/CMake/bin/clang-scan-deps-23.0.com"
+      - "C:/Program Files/CMake/bin/clang-scan-deps-23.0.exe"
+      - "C:/Program Files/CMake/bin/clang-scan-deps-23.0"
+      - "/bin/clang-scan-deps-23.0.com"
+      - "/bin/clang-scan-deps-23.0.exe"
+      - "/bin/clang-scan-deps-23.0"
+      - "/sbin/clang-scan-deps-23.0.com"
+      - "/sbin/clang-scan-deps-23.0.exe"
+      - "/sbin/clang-scan-deps-23.0"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps-23.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps-23.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps-23"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps-23.com"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps-23.exe"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps-23"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps-23.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps-23.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps-23"
+      - "C:/ant/bin/clang-scan-deps-23.com"
+      - "C:/ant/bin/clang-scan-deps-23.exe"
+      - "C:/ant/bin/clang-scan-deps-23"
+      - "C:/Program Files/nodejs/clang-scan-deps-23.com"
+      - "C:/Program Files/nodejs/clang-scan-deps-23.exe"
+      - "C:/Program Files/nodejs/clang-scan-deps-23"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps-23.com"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps-23.exe"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps-23"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps-23.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps-23.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps-23"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps-23.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps-23.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps-23"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps-23.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps-23.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps-23"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps-23.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps-23.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps-23"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps-23.com"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps-23.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps-23"
+      - "C:/Program Files/CMake/bin/clang-scan-deps-23.com"
+      - "C:/Program Files/CMake/bin/clang-scan-deps-23.exe"
+      - "C:/Program Files/CMake/bin/clang-scan-deps-23"
+      - "/bin/clang-scan-deps-23.com"
+      - "/bin/clang-scan-deps-23.exe"
+      - "/bin/clang-scan-deps-23"
+      - "/sbin/clang-scan-deps-23.com"
+      - "/sbin/clang-scan-deps-23.exe"
+      - "/sbin/clang-scan-deps-23"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps23.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps23.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps23"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps23.com"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps23.exe"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps23"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps23.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps23.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps23"
+      - "C:/ant/bin/clang-scan-deps23.com"
+      - "C:/ant/bin/clang-scan-deps23.exe"
+      - "C:/ant/bin/clang-scan-deps23"
+      - "C:/Program Files/nodejs/clang-scan-deps23.com"
+      - "C:/Program Files/nodejs/clang-scan-deps23.exe"
+      - "C:/Program Files/nodejs/clang-scan-deps23"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps23.com"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps23.exe"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps23"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps23.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps23.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps23"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps23.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps23.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps23"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps23.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps23.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps23"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps23.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps23.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps23"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps23.com"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps23.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps23"
+      - "C:/Program Files/CMake/bin/clang-scan-deps23.com"
+      - "C:/Program Files/CMake/bin/clang-scan-deps23.exe"
+      - "C:/Program Files/CMake/bin/clang-scan-deps23"
+      - "/bin/clang-scan-deps23.com"
+      - "/bin/clang-scan-deps23.exe"
+      - "/bin/clang-scan-deps23"
+      - "/sbin/clang-scan-deps23.com"
+      - "/sbin/clang-scan-deps23.exe"
+      - "/sbin/clang-scan-deps23"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps.com"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps.exe"
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/clang-scan-deps"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps.com"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps.exe"
+      - "C:/Users/IK/Desktop/emsdk/clang-scan-deps"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps.com"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps.exe"
+      - "C:/Users/IK/Desktop/emsdk/mingw/7.1.0_64bit/bin/clang-scan-deps"
+      - "C:/ant/bin/clang-scan-deps.com"
+      - "C:/ant/bin/clang-scan-deps.exe"
+      - "C:/ant/bin/clang-scan-deps"
+      - "C:/Program Files/nodejs/clang-scan-deps.com"
+      - "C:/Program Files/nodejs/clang-scan-deps.exe"
+      - "C:/Program Files/nodejs/clang-scan-deps"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps.com"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps.exe"
+      - "C:/Users/IK/.cargo/bin/clang-scan-deps"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/Scripts/clang-scan-deps"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Python313/clang-scan-deps"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps.com"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps.exe"
+      - "C:/Users/IK/AppData/Local/Programs/Python/Launcher/clang-scan-deps"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps.com"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps.exe"
+      - "C:/Users/IK/AppData/Local/Microsoft/WindowsApps/clang-scan-deps"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps.com"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps.exe"
+      - "C:/Users/IK/AppData/Roaming/npm/clang-scan-deps"
+      - "C:/Program Files/CMake/bin/clang-scan-deps.com"
+      - "C:/Program Files/CMake/bin/clang-scan-deps.exe"
+      - "C:/Program Files/CMake/bin/clang-scan-deps"
+      - "/bin/clang-scan-deps.com"
+      - "/bin/clang-scan-deps.exe"
+      - "/bin/clang-scan-deps"
+      - "/sbin/clang-scan-deps.com"
+      - "/sbin/clang-scan-deps.exe"
+      - "/sbin/clang-scan-deps"
+    found: false
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Program Files (x86)/pureikyubu_wasm"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot;C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...
+
+---
+events:
+  -
+    kind: "find-v1"
+    backtrace:
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/Platform/Emscripten.cmake:6 (find_file)"
+      - "C:/Program Files/CMake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake:32 (include)"
+      - "CMakeLists.txt:2 (project)"
+    mode: "file"
+    variable: "_EMSCRIPTEN_PLATFORM_MODULE"
+    description: "Path to a file."
+    settings:
+      SearchFramework: "NEVER"
+      SearchAppBundle: "NEVER"
+      CMAKE_FIND_USE_CMAKE_PATH: true
+      CMAKE_FIND_USE_CMAKE_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH: true
+      CMAKE_FIND_USE_CMAKE_SYSTEM_PATH: true
+      CMAKE_FIND_USE_INSTALL_PREFIX: true
+    names:
+      - "Platform/Emscripten.cmake"
+    candidate_directories:
+      - "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/"
+    found: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake"
+    search_context:
+      ENV{PATH}:
+        - "C:\\Users\\IK\\Desktop\\emsdk"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\upstream\\emscripten"
+        - "C:\\Users\\IK\\Desktop\\emsdk\\mingw\\7.1.0_64bit\\bin"
+        - "C:\\ant\\bin"
+        - "C:\\Program Files\\nodejs\\"
+        - "C:\\Users\\IK\\.cargo\\bin"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\Scripts\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Python313\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Programs\\Python\\Launcher\\"
+        - "C:\\Users\\IK\\AppData\\Local\\Microsoft\\WindowsApps"
+        - "C:\\Users\\IK\\AppData\\Roaming\\npm"
+        - "C:\\Program Files\\CMake\\bin"
+      CMAKE_INSTALL_PREFIX: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+      CMAKE_SYSTEM_PREFIX_PATH:
+        - "/"
+      CMAKE_FIND_ROOT_PATH: "C:/Users/IK/Desktop/emsdk/upstream/emscripten/cache/sysroot"
+...

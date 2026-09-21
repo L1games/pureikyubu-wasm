@@ -1,0 +1,24 @@
+commit fb5656b4a7d4be0771db5cd97834a226c3174a07
+Author: Extrems <metaradil@gmail.com>
+Date:   Mon Jul 20 22:38:52 2026 -0400
+
+    - Add DK Bongos game selection by clapping.
+
+commit 8fe49ecbf98fcf296a1051874fc9d2e096a171e6
+Author: Extrems <metaradil@gmail.com>
+Date:   Fri Jul 10 22:48:16 2026 -0400
+
+    - Revert certain video timing tweaks.
+
+commit e013510178c0d58649bb32f91ca97293bc834ed5
+Author: Extrems <metaradil@gmail.com>
+Date:   Thu Jul 9 17:10:28 2026 -0400
+
+    - Update FatFs to R0.16-p2.
+
+commit 9c94126b9616ac8297325f98a3a2f9cd612cb407
+Author: Extrems <metaradil@gmail.com>
+Date:   Wed Jul 8 17:13:42 2026 -0400
+
+    - Reset floating-point registers.
+    - Fix order of operations.

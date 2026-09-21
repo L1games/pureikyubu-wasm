@@ -1,0 +1,3 @@
+C:/Users/IK/Desktop/pureikyubu/build-wasm/CMakeFiles/pureikyubu_wasm.dir
+C:/Users/IK/Desktop/pureikyubu/build-wasm/CMakeFiles/edit_cache.dir
+C:/Users/IK/Desktop/pureikyubu/build-wasm/CMakeFiles/rebuild_cache.dir

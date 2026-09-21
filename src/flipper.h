@@ -1,0 +1,153 @@
+/*
+
+# GCN Hardware
+
+This component emulates everything inside the ASIC Flipper, *except* the graphics system (GFX) and DSP.
+
+![Flipper_Block_Diagram](https://github.com/ogamespec/dolwin-docs/blob/master/HW/Flipper_ASIC_Block_Diagram.png?raw=true)
+
+A short tour into the Flipper stuff, without shocking details:
+- PI: Processor Interface (interrupts, etc.)
+- MI(MEM): Memory Interface (1T-SRAM)
+- IO subsystem, which includes: AI (Audio Mixer), EXI (SPI-like Macronix interface), SI (Serial Interface, goes to GameCube controllers connectors), DI (DVD Interface)
+- VI: Video output
+- DSP: It contains interface with PI, 3 DMA engines (ARAM, AI, DSP Mem), accelerator+interface for working with ARAM and DSPCore itself (computational module+IMEM/DMEM)
+- CP: Command Processor, used to send primitives to the GFX Engine (via XF)
+- GFX Engine Pipeline: XF -> SU -> RAS0 (edge) -> PE (Z-compare) -> RAS1 (s,t) -> TX -> RAS2 (color) -> TEV -> PE (Blending)
+
+## Real revisions of Flipper
+
+It is documented (in the Dolphin SDK) that there were at least 2 versions of Flipper hardware - `HW1` (an early debug version) and `HW2` (contained in the latest Devkits and Retail consoles).
+
+## A small note on VI
+
+GameCube uses a slightly alien image rendering engine:
+- The scene is drawn by the GPU into the internal Flipper frame buffer (EFB)
+- Then a special circuit (Copy Engine) copies this buffer to external memory on the fly converting RGB to YUV
+- Buffer from external memory (XFB) is used by the video output circuit to directly send the picture to the TV
+
+All this is wildly unoptimized in terms of emulation and is a lot of pain.
+
+Therefore, emulator developers ignore the XFB output and display in the emulator what the GPU draws. With rare exceptions, this works in most games, but it does not work in Homebrew and the games of some perverse developers.
+
+*/
+
+#pragma once
+
+// Config
+struct HWConfig
+{
+	// MI
+	size_t      ramsize;
+	bool		mi_log;
+
+	// CP
+	bool		cp_log;
+
+	// VI
+	void* renderTarget;
+	bool        vi_log;
+	bool        vi_xfb;
+	int         videoEncoderFuse;       // 1 - PAL, 0 - NTSC
+
+	// GFX
+	int         gfxPipeline;            // 0: shader (OpenGL) pipeline, 1: software pipeline
+
+	// PI
+	uint32_t    consoleVer;
+	bool		pi_log;
+
+	// EI
+	bool        exi_log;
+	bool        exi_osReport;
+	wchar_t     ansiFilename[0x1000];
+	wchar_t     sjisFilename[0x1000];
+
+	// DI
+	bool		di_log;
+
+	// AI
+	bool		ai_log;
+
+	// SI
+	bool		si_log;
+
+	// MC
+	bool        MemcardA_Connected;
+	bool        MemcardB_Connected;
+	wchar_t     MemcardA_Filename[0x1000];
+	wchar_t     MemcardB_Filename[0x1000];
+	bool        Memcard_SyncSave;
+
+	wchar_t     BootromFilename[0x1000];
+	wchar_t     DspDromFilename[0x1000];
+	wchar_t     DspIromFilename[0x1000];
+
+};
+
+namespace GFX
+{
+	class GFXCore;
+}
+
+namespace Flipper
+{
+	class AudioMixer;
+	class AudioInterface;
+	class DiskInterface;
+	class ExternalInterface;
+	class SerialInterface;
+	class MemoryInterface;
+	class CommandProcessor;
+	class ProcessorInterface;
+	class VideoInterface;
+
+	// The granularity at which the VI scan-out and the serial poll see the time base. It has to stay
+	// well below one VI line (`vi.one_frame / vi.vcount`, about 2570 ticks on NTSC), and 100 ticks
+	// is 50 interpreter instructions or a couple of basic blocks.
+	static const int64_t FlipperTickStep = 100;
+
+	/// <summary>
+	/// Global class for driving Flipper ASIC.
+	/// </summary>
+	class Flipper
+	{
+		int64_t hwUpdateTbrValue = 0;
+
+		AudioInterface* ai = nullptr;
+		DiskInterface* di = nullptr;
+
+		size_t memsize;			//!< The size of the main memory (Splash) from the configuration. Used to call GetMemorySize.
+
+	public:
+		//! The serial / controller interface. Public like `gfx` and `vi`: the unit tests drive its
+		//! poll schedule and its registers directly.
+		SerialInterface* si = nullptr;
+
+		Flipper(HWConfig* config);
+		~Flipper();
+
+		/// <summary>
+		/// The periodic Flipper-side work (the VI scan-out and the serial interface poll).
+		/// It is driven by the CPU thread from the tick the emulated CPU advances, at the ticks
+		/// where it is due. It used to live on a thread of its own that polled the shared time base
+		/// in a tight loop; that thread made every write of the time base transfer the cache line
+		/// between the cores and cost more than the work it performed (see the benchmark notes in
+		/// `testing/gekko_bench`). `ticks` is the current value of the emulated time base.
+		/// </summary>
+		void Update(int64_t ticks);
+
+		AudioMixer* Mixer = nullptr;
+
+		CommandProcessor* cp = nullptr;
+		ExternalInterface* exi = nullptr;
+		MemoryInterface* mem = nullptr;
+		ProcessorInterface* pi = nullptr;
+		VideoInterface* vi = nullptr;
+		GFX::GFXCore* gfx = nullptr;
+
+		uint32_t GetMemorySize();
+	};
+
+	extern Flipper* HW;
+}

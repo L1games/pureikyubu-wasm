@@ -1,0 +1,653 @@
+
+#pragma once
+
+namespace DSP
+{
+	// Flag modify rules
+
+	enum class CFlagRules
+	{
+		None = -1,
+		Zero,
+		C1,		// (Ds(39) & S(39)) | (~Dd(39) & (Ds(39) | S(39)))
+		C2,		// (Ds(39) & ~S(39)) | (~Dd(39) & (Ds(39) | ~S(39)))
+		C3,		// Ds(39) ^ S(15) != 0 ? (Ds(39) & S(15)) | (~Dd(39) & (Ds(39) | S(15))) : (Ds(39) & ~S(15)) | (~Dd(39) & (Ds(39) | ~S(15)))
+		C4,		// ~Ds(39) & ~Dd(39)
+		C5,		// Ds(39) ^ S(31) == 0 ? (Ds(39) & S(39)) | (~Dd(39) & (Ds(39) | S(39))) : (Ds(39) & ~S(39)) | (~Dd(39) & (Ds(39) | ~S(39)))
+		C6,		// Ds(39) & ~Dd(39)
+		C7,		// P(39) & ~D(39)
+		C8,		// (P(39) & S(39)) | (~D(39) & (P(39) | S(39)))
+	};
+
+	enum class VFlagRules
+	{
+		None = -1,
+		Zero,
+		V1,		// (Ds(39) & S(39) & ~Dd(39)) | (~Ds(39) & ~S(39) & Dd(39))
+		V2,		// (Ds(39) & ~S(39) & ~Dd(39)) | (~Ds(39) & S(39) & Dd(39))
+		V3,		// Ds(39)& Dd(39)
+		V4,		// ~Ds(39) & Dd(39)
+		V5,		// Dd(39)
+		V6,		// ~P(39) & D(39)
+		V7,		// (P(39) & S(39) & ~D(39)) | (~P(39) & ~S(39) & D(39))
+		V8,		// Ds(39) & ~Dd(39)
+	};
+
+	enum class ZFlagRules
+	{
+		None = -1,
+		Z1,		// Dd == 0
+		Z2,		// Dd(31 - 16) == 0
+		Z3,		// Dd(39 - 0) == 0
+	};
+
+	enum class NFlagRules
+	{
+		None = -1,
+		N1,		// Dd(39)
+		N2,		// Dd(31)
+	};
+
+	enum class EFlagRules
+	{
+		None = -1,
+		E1,		// Dd(39 - 31) != (0b0'0000'0000 || 0b1'1111'1111)
+	};
+
+	enum class UFlagRules
+	{
+		None = -1,
+		U1,		// ~(Dd(31) ^ Dd(30))
+	};
+
+}
+
+
+// DSPcore stack implementation.
+
+namespace DSP
+{
+
+	class DspStack
+	{
+		uint16_t* stack;
+		int ptr = 0;
+		int depth;
+
+	public:
+		DspStack(size_t _depth);
+		~DspStack();
+
+		bool push(uint16_t val);
+		bool pop(uint16_t& val);
+		uint16_t top();
+		uint16_t at(int pos);
+		bool empty();
+		int size();
+		void clear();
+	};
+
+}
+
+// GameCube DSP interpreter
+
+namespace DSP
+{
+	class DspCore;
+}
+
+namespace DSP
+{
+	class DspInterpreter
+	{
+		DspCore* core;
+
+		// Both halves of a packed word execute in one cycle: they sample the register file at the
+		// start of the cycle and write their results at the end of it. The interpreter runs the
+		// ALU half first, so any register the memory half *reads* (the store data of `st`/`ls` or
+		// the source of `mv`) is latched by `LatchPackedMemoryOperand` before that, and the memory
+		// half then stores the latched value. The pipelined block moves of the shipped microcode
+		// (`amv a,s` together with `ls ...,a`, which stores the word sampled one iteration
+		// earlier) depend on this: without the latch every such copy comes out shifted by one word.
+		uint16_t packedMemoryData = 0;
+		bool packedMemoryDataLatched = false;
+
+		// Regular instructions (single-word)
+
+		void jmp();
+		void call();
+		void rets();
+		void reti();
+		void trap();
+		void wait();
+		void exec();
+		void loop();
+		void rep();
+		void pld();
+		void mr();
+		void adsi();
+		void adli();
+		void cmpsi();
+		void cmpli();
+		void lsfi();
+		void asfi();
+		void xorli();
+		void anli();
+		void orli();
+		void norm();
+		void div();
+		void addc();
+		void subc();
+		void negc();
+		void _max();
+		void lsf();
+		void asf();
+		void ld();
+		void st();
+		void ldsa();
+		void stsa();
+		void ldla();
+		void stla();
+		void mv();
+		void mvsi();
+		void mvli();
+		void stli();
+		void clr();
+		void set();
+		void btstl();
+		void btsth();
+
+		// Parallel instructions that occupy the upper part (in the lower part there is a parallel Load / Store / Move instruction)
+
+		void p_add();
+		void p_addl();
+		void p_sub();
+		void p_amv();
+		void p_cmp();
+		void p_inc();
+		void p_dec();
+		void p_abs();
+		void p_neg();
+		void p_clr();
+		void p_rnd();
+		void p_rndp();
+		void p_tst();
+		void p_lsl16();
+		void p_lsr16();
+		void p_asr16();
+		void p_addp();
+		void p_set();
+		void p_mpy();
+		void p_mac();
+		void p_macn();
+		void p_mvmpy();
+		void p_rnmpy();
+		void p_admpy();
+		void p_not();
+		void p_xor();
+		void p_and();
+		void p_or();
+		void p_lsf();
+		void p_asf();
+
+		// Parallel mem opcodes (low part)
+
+		void p_ldd();
+		void p_ls();
+		void p_ld();
+		void p_st();
+		void p_mv();
+		void p_mr();
+
+		// Helpers
+
+		void LatchPackedMemoryOperand();
+		void FetchMpyParams(DspParameter s1p, DspParameter s2p, int64_t& s1, int64_t& s2, bool checkDp);
+		void AdvanceAddress(int r, DspParameter param);
+		bool ConditionTrue(ConditionCode cc);
+		void Dispatch();
+
+		/// <summary>
+		/// Current decoded instruction.
+		///
+		/// The interpreter owns one decoded instruction (`infoStorage`); `info` points at it. The
+		/// recompiler decodes a whole basic block once at compile time and hands each word's
+		/// DecoderInfo back through `info`, so the handlers below never have to care which engine
+		/// is running them (see dspjit.h).
+		/// </summary>
+		DecoderInfo infoStorage = { 0 };
+		DecoderInfo* info = &infoStorage;
+
+		/// <summary>
+		/// The instruction-advance rules of `Dispatch`, split out so that the recompiler can run
+		/// them for a word whose handler it called directly. `CommitCounter` retires the
+		/// instruction counter; `CommitNextPc` applies the repeat/loop rules to a pc.
+		/// </summary>
+		void CommitCounter();
+		uint32_t CommitNextPc(uint32_t pc);
+
+		/// <summary>
+		/// Everything Dispatch() does after the opcode handlers for one recompiled word, with the
+		/// pc passed in and returned (the recompiler keeps it in a host register). Static so that
+		/// the recompiler can take its address and call it directly from generated code.
+		/// </summary>
+		static uint32_t JitCommit(DspInterpreter* interp, uint32_t pc);
+
+		bool flowControl = false;
+
+		// The recompiler calls the instruction handlers directly (through the trampolines in
+		// dspjit.cpp) and reads the state above, so it needs access to the private members. It
+		// never changes their meaning - it only calls the same code the interpreter calls.
+		friend class Jit;
+
+	public:
+		DspInterpreter(DspCore* parent);
+		~DspInterpreter();
+
+		void ExecuteInstr();
+
+	};
+}
+
+
+
+// Macronix DSP core
+
+
+namespace DSP
+{
+#pragma warning (push)
+#pragma warning (disable: 4201)
+
+#pragma pack (push, 1)
+
+	union DspLongAccumulator
+	{
+		struct
+		{
+			uint16_t	l;
+			union
+			{
+				struct
+				{
+					uint16_t	m;
+					uint16_t	h;
+				};
+				uint32_t hm;
+				int32_t shm;
+			};
+		};
+		uint64_t	bits;
+		int64_t		sbits;
+	};
+
+	union DspShortOperand
+	{
+		struct
+		{
+			uint16_t	l;
+			uint16_t	h;
+		};
+		uint32_t	bits;
+		int32_t		sbits;
+	};
+
+	struct DspProduct
+	{
+		struct
+		{
+			uint16_t l;			// ps0
+			uint16_t m1;		// ps1  (Duddie m1)
+			uint16_t h;			// ps2
+			uint16_t m2;		// pc1	(Duddie m2)
+		};
+		uint64_t bitsPacked;
+	};
+
+	union DspStatus
+	{
+		struct
+		{
+			unsigned c : 1;		// Carry
+			unsigned v : 1;		// Overflow 
+			unsigned z : 1;		// Zero
+			unsigned n : 1;		// Negative
+			unsigned e : 1;		// Extension (above s32)
+			unsigned u : 1;		// Unnormalization
+			unsigned tb : 1;	// Test bit (btstl/btsth instructions)
+			unsigned sv : 1;	// Sticky overflow. Set together with the V overflow bit, can only be cleared by the `clr sv` instruction.
+			unsigned te0 : 1;	// Interrupt enable 0 (Not used)
+			unsigned te1 : 1;	// Interrupt enable 1 (Acrs, Acwe, Dcre)
+			unsigned te2 : 1;	// Interrupt enable 2 (AiDma, not used by ucodes)
+			unsigned te3 : 1;	// Interrupt enable 3 (CpuInt)
+			unsigned et : 1;	// Global interrupt enable
+			unsigned im : 1;	// Integer/fraction mode. 0: fraction mode, 1: integer mode. In fraction mode, the output of the multiplier is shifted left 1 bit to remove the sign.
+			unsigned xl : 1;	// Extension limit mode. Affects the loading and saving of a/b operands.
+			unsigned dp : 1;	// Double precision mode. Affects mixed multiply (xxxMPY) instructions. When DP = 1, some of the operands of these instructions are signed and some are unsigned.
+		};
+
+		uint16_t bits;
+	};
+
+#pragma pack (pop)
+
+	enum class DspRegister
+	{
+		r0,		// Address register 0 (circular addressing)
+		r1,		// Address register 1 (circular addressing)
+		r2,		// Address register 2 (circular addressing)
+		r3,		// Address register 3 (circular addressing)
+		m0,		// Modifier value 0 (circular addressing)
+		m1,		// Modifier value 1 (circular addressing)
+		m2,		// Modifier value 2 (circular addressing)
+		m3,		// Modifier value 3 (circular addressing)
+		l0,		// Buffer length 0 (circular addressing)
+		l1,		// Buffer length 1 (circular addressing)
+		l2,		// Buffer length 2 (circular addressing)
+		l3,		// Buffer length 3 (circular addressing)
+		pcs,	// Program counter stack
+		pss,	// Program status stack
+		eas,	// End address stack
+		lcs,	// Loop count stack
+		a2,		// 40 - bit accumulator `a` high 8 bits
+		b2,		// 40 - bit accumulator `b` high 8 bits
+		dpp,	// Used as high 8 - bits of address for some load / store instructions
+		psr,	// Program status register
+		ps0,	// Product partial sum low part
+		ps1,	// Product partial sum middle part
+		ps2,	// Product partial sum high part (8 bits)
+		pc1,	// Product partial carry 1 middle part
+		x0,		// ALU / Multiplier input operand `x` low part
+		y0,		// ALU / Multiplier input operand `y` low part
+		x1,		// ALU / Multiplier input operand `x` high part
+		y1,		// ALU / Multiplier input operand `y` high part
+		a0,		// 40 - bit accumulator `a` low 16 bits
+		b0,		// 40 - bit accumulator `b` low 16 bits
+		a1,		// 40 - bit accumulator `a` middle 16 bits / Whole `a` accumulator
+		b1,		// 40 - bit accumulator `b` middle 16 bits / Whole `b` accumulator
+	};
+
+	/// <summary>
+	/// DSPcore registers.
+	/// </summary>
+	struct DspRegs
+	{
+		uint16_t r[4];		// Addressing registers
+		uint16_t m[4];		// Modifier value registers
+		uint16_t l[4];		// Buffer length registers
+		DspStack* pcs;		// Program counter stack
+		DspStack* pss;		// Program status stack
+		DspStack* eas;		// End address stack
+		DspStack* lcs;		// Loop count stack
+		DspLongAccumulator a, b;	// 40-bit Accumulators
+		DspShortOperand x, y;		// 32-bit operands
+		DspProduct prod;			// Product register
+		uint16_t dpp;		// Used as high 8-bits of address for some load/store instructions
+		DspStatus psr;		// Processor status
+		DspAddress pc;		// Program counter
+	};
+
+	/// <summary>
+	/// DSP interrupts.
+	/// </summary>
+	enum class DspInterrupt
+	{
+		Reset = 0,	// Soft reset
+		Error,		// Stack underflow/overflow
+		Trap,		// Trap instruction
+		Acrs,		// Accelerator read start (TE1)
+		Acwe,		// Accelerator write end (TE1)
+		Dcre,		// Decoder read end (TE1)
+		AiDma,		// Not used (TE2)
+		CpuInt,		// External interrupt (from CPU) (TE3)
+
+		Max,
+	};
+
+	struct DspInterruptControl
+	{
+		bool pendingSomething;
+		int pendingDelay[(size_t)DspInterrupt::Max];
+		bool pending[(size_t)DspInterrupt::Max];
+	};
+
+	class Dsp16;
+	class Jit;
+
+	// Development trace (DSP_TRACE_RING=1): a lock-free ring of the last execution steps and the
+	// IRAM writes, dumped when the core stops on a pc it cannot fetch. Writing a log line per
+	// step perturbs the timing enough to hide some bugs, which is why the ring keeps everything
+	// in memory and only the dump does I/O. See DspCore::RunJitBlock and
+	// DspInterpreter::ExecuteInstr.
+	void TraceStep(uint32_t pc, uint32_t retired);
+	void TraceMark(uint32_t marker);
+	void TraceDump();
+	uint32_t TraceLastPc();
+
+	/// <summary>
+	/// Macronix DSP core.
+	/// </summary>
+	class DspCore
+	{
+		friend Dsp16;
+		friend DspInterpreter;
+		friend DspUnitTest::DspUnitTest;
+
+		static const size_t IRAM_SIZE = (8 * 1024);
+		static const size_t IROM_SIZE = (8 * 1024);
+		static const size_t DRAM_SIZE = (8 * 1024);
+		static const size_t DROM_SIZE = (4 * 1024);
+
+		static const size_t IROM_START_ADDRESS = 0x8000;
+		static const size_t DROM_START_ADDRESS = 0x1000;
+		static const size_t IFX_START_ADDRESS = 0xFF00;		// Internal dsp "hardware"
+
+		uint8_t iram[IRAM_SIZE] = { 0 };
+		uint8_t irom[IROM_SIZE] = { 0 };
+		uint8_t dram[DRAM_SIZE] = { 0 };
+		uint8_t drom[DROM_SIZE] = { 0 };
+
+		std::list<DspAddress> breakpoints;		// IMEM breakpoints
+		SpinLock breakPointsSpinLock;
+		DspAddress oneShotBreakpoint = 0xffff;
+
+		std::map<DspAddress, std::string> canaries;		// When the PC is equal to the canary address, a debug message is displayed
+		SpinLock canariesSpinLock;
+
+		std::list<DspAddress> watches;		// DMEM watches
+		SpinLock watchesSpinLock;
+
+		// The Gekko runs at 486 MHz and the DSP at 81 MHz, so the DSP retires one instruction per
+		// six time base ticks. The anchor `savedGekkoTicks` counts time base ticks (see Update).
+		static const int64_t GekkoTicksPerDspInstruction = 6;
+
+		const uint32_t GekkoTicksPerDspSegment = 100;		// How many Gekko ticks should pass so that we can execute one DSP segment (in case of Jitc)
+
+		DspInterpreter* interp = nullptr;
+		Jit* jit = nullptr;
+
+		Dsp16* dsp = nullptr;
+
+		DspInterruptControl intr = { 0 };
+
+		void CheckInterrupts();
+		uint16_t CircularAddress(uint16_t r, uint16_t l, int16_t m);
+
+		int repeatCount = 0;		// Internal register for the `rep` instruction.
+
+		int64_t instructionCounter = 0;
+		bool resetInstructionCounter = false;
+
+		/// <summary>
+		/// In a real Flipper 2 writes to CPU->DSP Mailbox cannot be interrupted in the middle by a read from the DSP side.
+		/// If this happens - Deadlock can happen.
+		/// We solve this problem by holding the DSP off for a few ticks after each mailbox write.
+		///
+		/// This is a tick, not a number of Update() calls: Update() now drains a whole batch, so
+		/// counting calls would hold the DSP off for a whole batch (thousands of ticks) instead of
+		/// the few instructions the two mailbox writes are apart.
+		/// </summary>
+		int64_t mailboxHoldTick = 0;
+		static const int64_t MailboxHoldTicks = 100;
+
+		/// <summary>
+		/// The core is sitting on a `wait` instruction. The clock stops there until an interrupt
+		/// arrives, and the wait is over once one does: the interrupt resumes the microcode with
+		/// the instruction that follows the wait (dsp-isa.md: a wait stops "until reset or an
+		/// unmasked interrupt"), which is where every microcode keeps what it wants to run next.
+		/// Leaving the program counter on the wait instead would make that code unreachable.
+		/// </summary>
+		bool waitHalted = false;
+
+		/// <summary>
+		/// Called by the CPU side after a mailbox half-write: hold the DSP off for a few ticks so
+		/// that it cannot read the mailbox between the two halves of a message (see mailboxHoldTick).
+		/// Tolerates a null Core, which is what the DSP unit tests have (they drive the mailbox
+		/// directly, without a Gekko core behind it).
+		/// </summary>
+		void HoldMailbox();
+
+		// The DSP thread is woken through this event at the ticks where it has a batch of
+		// instructions' worth of time to execute (see TickSync), instead of polling the Gekko time
+		// base in a tight loop (see the benchmark notes in `testing/gekko_bench`).
+		Event workEvent;
+		int64_t wakeTick = 0;
+
+		/// <summary>
+		/// How many Gekko time base ticks one wakeup covers, i.e. `DspWakeTicks /
+		/// GekkoTicksPerDspInstruction` instructions. Waking up on every Flipper tick step would
+		/// mean roughly half a million scheduler wakeups per second, which costs more than the DSP
+		/// work itself.
+		/// </summary>
+		static const int64_t DspWakeTicks = 1000;
+
+		// The recompiler translates whole basic blocks and calls back into the interpreter for
+		// the parts it does not reimplement, so it needs the interpreter's private entry points
+		// and the addresses of the decoded-instruction handlers (see dspjit.cpp).
+		friend class Jit;
+
+	public:
+
+		static const size_t MaxInstructionSizeInBytes = 4;		// max instruction size
+
+		/// <summary>
+		/// Enable the basic block recompiler. It is an experimental feature and off by default:
+		/// turning it on is a deliberate act (`--dspjit`, the debugger's `dspjit 1`, or a test).
+		/// The generated code retires whole blocks, so the debug paths (single stepping,
+		/// breakpoints, canaries) keep using the interpreter.
+		/// </summary>
+		bool JitEnabled = false;
+
+		/// <summary>
+		/// Bumped every time the compiled code is invalidated (DspCore::InvalidateJit, and the
+		/// recompiler's own invalidation when its arena is reset). The generated block carries
+		/// the value it was compiled under and tests it after every word, so a block that is
+		/// running when the instruction stream changes - a DSP-DMA that writes the microcode
+		/// into IRAM, which the boot loader does while a block is live - leaves immediately
+		/// instead of running the words it was built from.
+		/// </summary>
+		uint32_t jitGeneration = 1;
+
+		DspRegs regs;
+
+		DspCore(Dsp16* parent);
+		~DspCore();
+
+		bool LoadIrom(std::vector<uint8_t>& iromImage);
+		bool LoadDrom(std::vector<uint8_t>& dromImage);
+
+		uint8_t* TranslateIMem(DspAddress addr);
+		uint8_t* TranslateDMem(DspAddress addr);
+		uint16_t ReadIMem(DspAddress addr);
+
+		void AssertInterrupt(DspInterrupt id);
+		bool IsInterruptPending(DspInterrupt id);
+		void ReturnFromInterrupt();
+		void HardReset();
+
+		void Update();
+
+		/// <summary>
+		/// Run one compiled basic block (or one interpreted instruction when the pc cannot be
+		/// compiled). Returns the number of DSP instruction words retired. Used by Update() and
+		/// by the differential tests, which compare a run of blocks against the interpreter.
+		/// </summary>
+		uint32_t RunJitBlock();
+
+		/// <summary>
+		/// The recompiler, for the differential tests (the emulator itself only goes through
+		/// Update / RunJitBlock).
+		/// </summary>
+		Jit* GetJit() { return jit; }
+
+		/// <summary>
+		/// Limit how many words one compiled block may hold (the tests set it to 1 so that a
+		/// block retires exactly one instruction and can be compared word for word).
+		/// </summary>
+		void SetJitMaxBlockInstrs(uint32_t count);
+
+		/// <summary>
+		/// Drop every compiled block. Called when the instruction memory (or the meaning of an
+		/// address in it) can have changed: a hard reset, an IROM/DROM load and any DSP-DMA that
+		/// wrote instruction memory.
+		/// </summary>
+		void InvalidateJit();
+
+		/// <summary>
+		/// Called by the CPU thread (through Flipper::Update) every Flipper tick step, so that the
+		/// DSP thread is woken once per `DspWakeTicks`.
+		/// </summary>
+		void TickSync(int64_t ticks);
+
+		/// <summary>
+		/// Block until the next batch of DSP time is due (see TickSync).
+		/// </summary>
+		void WaitForWork();
+
+		// Debug methods
+
+		void AddBreakpoint(DspAddress imemAddress);
+		void RemoveBreakpoint(DspAddress imemAddress);
+		void ListBreakpoints();
+		void ClearBreakpoints();
+		bool TestBreakpoint(DspAddress imemAddress);
+		void ToggleBreakpoint(DspAddress imemAddress);
+		void AddOneShotBreakpoint(DspAddress imemAddress);
+		void AddCanary(DspAddress imemAddress, std::string text);
+		void ListCanaries();
+		void ClearCanaries();
+		bool TestCanary(DspAddress imemAddress);
+		void Step();
+		void DumpRegs(DspRegs* prevState);
+		void AddWatch(DspAddress dmemAddress);
+		void RemoveWatch(DspAddress dmemAddress);
+		void RemoveAllWatches();
+		void ListWatches(std::list<DspAddress>& watches);
+		bool TestWatch(DspAddress dmemAddress);
+		int64_t GetInstructionCounter();
+		void ResetInstructionCounter();
+
+		// Register access
+
+		void MoveToReg(int reg, uint16_t val);
+		uint16_t MoveFromReg(int reg);
+
+		// Multiplier and ALU utils
+
+		static int64_t SignExtend16(int16_t);
+		static int64_t SignExtend32(int32_t);
+		static int64_t SignExtend40(int64_t);
+
+		static void PackProd(DspProduct& prod);
+		static void UnpackProd(DspProduct& prod);
+
+		void ArAdvance(int r, int16_t step);
+
+		void ModifyFlags(uint64_t d, uint64_t s, uint64_t r, CFlagRules, VFlagRules, ZFlagRules, NFlagRules, EFlagRules, UFlagRules);
+
+		static int64_t RndFactor(int64_t d);
+	};
+
+#pragma warning (pop)		// warning C4201: nonstandard extension used: nameless struct/union
+
+}
